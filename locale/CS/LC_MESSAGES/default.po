@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.2.2\n"
-"POT-Creation-Date: 2011-02-19 17:54\n"
-"PO-Revision-Date: 2011-02-19 17:56+0100\n"
+"POT-Creation-Date: 2011-03-03 14:04\n"
+"PO-Revision-Date: 2011-03-03 14:05+0100\n"
 "Last-Translator: mikrom <mikrom@mikrom.cz>\n"
 "Language-Team: mikrom <mikrom@mikrom.cz>\n"
 "MIME-Version: 1.0\n"
@@ -141,53 +141,55 @@ msgstr "Soubory s příponou *.log"
 msgid "GeoGet LOG files"
 msgstr "Soubory záznamů činnosti"
 
-#. Designer..lblItemsFound..Caption
-#: ClearTempConfirm.gfm:22
-msgid "items found"
-msgstr "položek nalezeno"
-
-#. Designer..lblCount..Caption
-#: ClearTempConfirm.gfm:30
-msgid "Count"
-msgstr ""
-
 #. Designer..Label1..Caption
-#: ClearTempConfirm.gfm:37
+#: ClearTempConfirm.gfm:22
 msgid "You can use Ctrl or Shift and click to multiple select."
 msgstr "Můžete použít Ctrl nebo Shift + klik pro vícenásobný výběr."
 
+#. Designer..lblResult..Caption
+#: ClearTempConfirm.gfm:29
+msgid "Results"
+msgstr ""
+
 #. Designer..buttonDelete..Caption
-#: ClearTempConfirm.gfm:44
+#: ClearTempConfirm.gfm:36
 msgid "Delete"
 msgstr "Smazat"
 
-#: ClearTemp.ggp.pas:21
+#: ClearTemp.ggp.pas:22
 msgid "Clear Temp"
 msgstr ""
 
-#: ClearTemp.ggp.pas:26
+#: ClearTemp.ggp.pas:27
 msgid "Clear folders ggupdate, script_download, temp etc."
 msgstr "Smazání souborů v adresářích ggupdate, script_download, temp atd."
 
-#: ClearTemp.ggp.pas:182
+#: ClearTemp.ggp.pas:184
 msgid "Clear Temp - Options"
 msgstr "Clear Temp - Možnosti"
 
-#: ClearTemp.ggp.pas:193
+#: ClearTemp.ggp.pas:195
 msgid "Searching files"
 msgstr "Hledám soubory"
 
-#: ClearTemp.ggp.pas:235
+#: ClearTemp.ggp.pas:234
+msgid "Found %COUNT% items with total size %SIZE% kB"
+msgstr "Nalezeno %COUNT% souborů o celkové velikosti %SIZE% kB"
+
+#: ClearTemp.ggp.pas:240
 msgid "Clear Temp - Confirm results"
 msgstr "Clear Temp - Potvrzení výsledku"
 
-#: ClearTemp.ggp.pas:239
+#: ClearTemp.ggp.pas:244
 msgid "Deleting files"
 msgstr "Mažu soubory"
 
-#: ClearTemp.ggp.pas:252
+#: ClearTemp.ggp.pas:257
 msgid "Clean up!"
 msgstr "Závěrečný úklid!"
+
+#~ msgid "items found"
+#~ msgstr "položek nalezeno"
 
 #~ msgid "Empty value delete all files"
 #~ msgstr "Prázdná hodnota maže všechny soubory"

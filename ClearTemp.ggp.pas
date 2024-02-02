@@ -15,6 +15,7 @@ uses
 
 var
   DatabaseIDList: TStringList;
+  totalSize: integer;
 
 function PluginCaption: string;
 begin
@@ -89,6 +90,7 @@ procedure ProcessFile(files: string);
 begin
   GeoBusyKind(ReplaceString(files,GEOGET_DATADIR,''));
   ClearTempConfirmDelete_lbDeleteFiles.Items.Add(files);
+  totalSize := totalSize + GetFileSize(files);
 end;
 
 {Hleda soubor v dadanem adresari (vcetne podslozek). vraci celou cestu k souboru}
@@ -144,6 +146,7 @@ procedure PluginStart;
 var
   i: Integer;
   options: TIniFile;
+  resultsLabel: string;
 begin
   {nacteni konfigurace ze souboru}
   if FileExists(GEOGET_SCRIPTDIR+'\ClearTemp\ClearTemp.ini') then
@@ -228,7 +231,10 @@ begin
     ClearTempConfirmDelete_lbDeleteFiles.Selected[i] := True;
   
   {popisek s poctem nalezu}
-  ClearTempConfirmDelete_lblCount.Caption := IntToStr(ClearTempConfirmDelete_lbDeleteFiles.Items.Count);
+  resultsLabel := _('Found %COUNT% items with total size %SIZE% kB');
+  resultsLabel := ReplaceString(resultsLabel,'%COUNT%',IntToStr(ClearTempConfirmDelete_lbDeleteFiles.Items.Count));
+  resultsLabel := ReplaceString(resultsLabel,'%SIZE%',IntToStr(totalSize/1024));
+  ClearTempConfirmDelete_lblResult.Caption := resultsLabel;
   
   {dialog s vysledky}
   ClearTempConfirmDelete.Caption := _('Clear Temp - Confirm results');

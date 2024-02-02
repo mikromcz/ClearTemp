@@ -1,0 +1,22 @@
+=== 0.0.2.5 (2011/03/03) ===
+  * drobná zmìna ve výpisu poètu nalezených souboru, plus se ještì ukazuje jejich celková velikost
+
+=== 0.0.2.4 (2011/02/20) [staženo 39x] ===
+  * smazaní prázdných složek v ''offline\cache'', ''offline\maps'' a ''offline\inc''
+  * možnost mazání souborù *.log
+  * možnost mazat //offline// soubory ke kterým v databázi neexistuje keš
+
+=== 0.0.2.3 (2011/01/27) [staženo 44x] ===
+  * ukládání naposledy použitého nastavení
+
+=== 0.0.2.2 (2011/01/27) [staženo 0x] ===
+  * pøibyla indikace prùbìhu mazání
+  * soubory ve složce \offline se nevybírají podle data, ale podle stáøí ve dnech
+  * èeská lokalizace
+
+=== 0.0.2.1 (2011/01/27) [staženo 0x] ===
+  * maže se: ggupdate / script_download / temp / pq\temp / soubory s priponou *.old / offline\cache - soubory starsi nez vybrane datum / offline\maps - soubory starsi nez vybrane datum / offline\inc - soubory starsi nez vybrane datum
+  * vse je volitelny pres checkboxy. nakonec se ukaze seznam vseho co se bude mazat, vsechny soubory jsou defaultve vybrany, ale neni problem si treba nektery odznacit...
+
+=== 0.0.2.0 (2011/01/26) [staženo 1x] ===
+  * moje úvodní verze, která vznikla na základì úprav ProKesTomovy verze

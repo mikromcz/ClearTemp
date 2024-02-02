@@ -14,27 +14,19 @@ object Designer: TJvDesignPanel
   Align = alClient
   PopupMenu = DesignForm.PopupMenu1
   TabOrder = 0
-  object lblItemsFound: TLabel
-    Left = 50
-    Top = 278
-    Width = 67
-    Height = 16
-    Caption = 'items found'
-  end
-  object lblCount: TLabel
-    Left = 10
-    Top = 278
-    Width = 34
-    Height = 16
-    Alignment = taRightJustify
-    Caption = 'Count'
-  end
   object Label1: TLabel
     Left = 10
     Top = 303
-    Width = 304
+    Width = 305
     Height = 16
     Caption = 'You can use Ctrl or Shift and click to multiple select.'
+  end
+  object lblResult: TLabel
+    Left = 10
+    Top = 278
+    Width = 44
+    Height = 16
+    Caption = 'Results'
   end
   object buttonDelete: TBitBtn
     Left = 395
