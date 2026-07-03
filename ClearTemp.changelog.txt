@@ -1,22 +1,33 @@
-=== 0.0.2.5 (2011/03/03) ===
-  * drobn� zm�na ve v�pisu po�tu nalezen�ch souboru, plus se je�t� ukazuje jejich celkov� velikost
+=== 0.3.0 (2026/07/03) ===
+  * Kategorie mazání se nyní načtou dynamicky ze souboru ClearTemp.definitions.ini (formát inspirovaný CCleaner winapp2.ini) místo pevně dané nabídky checkboxů
+  * Přibyla podpora dalších kategorií pro dočasné soubory jiných skriptů (Combine2, Degree360, Discover, GeoJarry, Logator, SeriesII, Spoiler, Stator, MtpToolLib, SRTM, přílohy k neexistujícím keším), automaticky skryté pokud daný skript není nainstalován
+  * Česká lokalizace textu jednotlivých kategorií (Label_CS/Hint_CS v ClearTemp.definitions.ini) už nezávisí na gettext/mo souboru - zapíná se ručně přes Language=CS v ClearTemp.ini
+  * Osobní nastavení (zaškrtnuté kategorie, jazyk) je nyní oddělené od definic v souboru ClearTemp.ini
+  * Celková velikost nalezených souborů se ukazuje v MB
+  * Dvojklik na položku v potvrzovacím seznamu otevře adresář, kde se soubor nachází
+  * Horizontální scrollbar v potvrzovacím seznamu pro dlouhé cesty
+  * Oprava: "-2 pokud není v databázi" (např. u osiřelých příloh) nefungovalo správně, protože AllowNotInDatabase/Default v ClearTemp.definitions.ini používalo True/False místo 1/0
+  * Uložené nastavení z předchozích verzí (zaškrtnutí kategorií) se po aktualizaci jednorázově resetuje na výchozí hodnoty
 
-=== 0.0.2.4 (2011/02/20) [sta�eno 39x] ===
-  * smazan� pr�zdn�ch slo�ek v ''offline\cache'', ''offline\maps'' a ''offline\inc''
-  * mo�nost maz�n� soubor� *.log
-  * mo�nost mazat //offline// soubory ke kter�m v datab�zi neexistuje ke�
+=== 0.2.5 (2011/03/03) ===
+  * Drobná změna ve výpisu počtu nalezených souborů, plus se ještě ukazuje jejich celková velikost
 
-=== 0.0.2.3 (2011/01/27) [sta�eno 44x] ===
-  * ukl�d�n� naposledy pou�it�ho nastaven�
+=== 0.2.4 (2011/02/20) [staženo 39x] ===
+  * Smazání prázdných složek v ''offline\cache'', ''offline\maps'' a ''offline\inc''
+  * Možnost mazání souborů *.log
+  * Možnost mazat //offline// soubory ke kterým v databázi neexistuje keš
 
-=== 0.0.2.2 (2011/01/27) [sta�eno 0x] ===
-  * p�ibyla indikace pr�b�hu maz�n�
-  * soubory ve slo�ce \offline se nevyb�raj� podle data, ale podle st��� ve dnech
-  * �esk� lokalizace
+=== 0.2.3 (2011/01/27) [staženo 44x] ===
+  * Ukládání naposledy použitého nastavení
 
-=== 0.0.2.1 (2011/01/27) [sta�eno 0x] ===
-  * ma�e se: ggupdate / script_download / temp / pq\temp / soubory s priponou *.old / offline\cache - soubory starsi nez vybrane datum / offline\maps - soubory starsi nez vybrane datum / offline\inc - soubory starsi nez vybrane datum
-  * vse je volitelny pres checkboxy. nakonec se ukaze seznam vseho co se bude mazat, vsechny soubory jsou defaultve vybrany, ale neni problem si treba nektery odznacit...
+=== 0.2.2 (2011/01/27) [staženo 0x] ===
+  * Přibyla indikace průběhu mazání
+  * Soubory ve složce \offline se nevybírají podle data, ale podle stáří ve dnech
+  * Česká lokalizace
 
-=== 0.0.2.0 (2011/01/26) [sta�eno 1x] ===
-  * moje �vodn� verze, kter� vznikla na z�klad� �prav ProKesTomovy verze
+=== 0.2.1 (2011/01/27) [staženo 0x] ===
+  * Maže se: ggupdate / script_download / temp / pq\temp / soubory s příponou *.old / offline\cache - soubory starší než vybrané datum / offline\maps - soubory starší než vybrané datum / offline\inc - soubory starší než vybrané datum
+  * Vše je volitelné přes checkboxy. Nakonec se ukáže seznam všeho co se bude mazat, všechny soubory jsou defaultně vybrané, ale není problém si třeba některý odznačit...
+
+=== 0.2.0 (2011/01/26) [staženo 1x] ===
+  * Moje úvodní verze, která vznikla na základě úprav ProKesTomovy verze

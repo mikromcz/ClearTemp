@@ -1,3 +1,11 @@
+{
+  GeoGet 2
+  www: http://geoget.ararat.cz/doku.php/user:skript:cleartemp
+
+  Autor: mikrom, http://mikrom.cz
+  Fórum: https://forum.geocaching.cz/t/clearcache-cleartemp-plugin-pro-mazani-nepotrebnych-souboru/16523
+}
+
 function InstallWork: String;
 begin
   {uklid po starsich verzich}

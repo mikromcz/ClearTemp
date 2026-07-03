@@ -5,15 +5,15 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.0.2.2\n"
-"POT-Creation-Date: 2011-03-03 14:04\n"
-"PO-Revision-Date: 2011-03-03 14:05+0100\n"
+"Project-Id-Version: 0.3.0\n"
+"POT-Creation-Date: 2026-07-03 00:00\n"
+"PO-Revision-Date: 2026-07-03 00:00+0100\n"
 "Last-Translator: mikrom <mikrom@mikrom.cz>\n"
 "Language-Team: mikrom <mikrom@mikrom.cz>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: dxgettext 1.3.0\n"
+"X-Generator: hand-maintained (dxgettext cannot extract ClearTemp.ini content)\n"
 "X-Poedit-Language: Czech\n"
 "X-Poedit-Country: CZECH REPUBLIC\n"
 
@@ -22,108 +22,109 @@ msgstr ""
 msgid "What do you want to clean?"
 msgstr "Co chcete smazat?"
 
-#. Designer..lblDaysCache..Caption
-#. Designer..lblDaysMaps..Caption
-#. Designer..lblDaysInc..Caption
-#: ClearTemp.gfm:29
-msgid "days"
-msgstr "dní"
-
-#. Designer..cbGeoget..Hint
-#: ClearTemp.gfm:50
-msgid "Files in folder \\ggupdate"
-msgstr "Soubory v adresáři \\ggupdate"
-
-#. Designer..cbGeoget..Caption
-#: ClearTemp.gfm:51
-msgid "Temporary installation files of Geoget"
-msgstr "Dočasné instalační soubory GeoGetu"
-
-#. Designer..cbScript..Hint
-#: ClearTemp.gfm:63
-msgid "Files in folder \\script_download"
-msgstr "Soubory v adresáři \\script_download"
-
-#. Designer..cbScript..Caption
-#: ClearTemp.gfm:64
-msgid "Temporary installation files of scripts"
-msgstr "Dočasné instalační soubory skriptů"
-
-#. Designer..cbTemp..Hint
-#: ClearTemp.gfm:76
-msgid "Files in folder \\temp"
-msgstr "Soubory v adresáři \\temp"
-
-#. Designer..cbTemp..Caption
-#: ClearTemp.gfm:77
-msgid "Other temporary files"
-msgstr "Ostatní dočasné soubory"
-
-#. Designer..cbOld..Hint
-#: ClearTemp.gfm:89
-msgid "Files with *.old extension"
-msgstr "Soubory s příponou *.old"
-
-#. Designer..cbOld..Caption
-#: ClearTemp.gfm:90
-msgid "Old versions of files"
-msgstr "Staré verze souborů"
-
 #. Designer..buttonOk..Caption
 #: ClearTemp.gfm:100
 msgid "OK"
 msgstr "OK"
 
 #. Designer..buttonCancel..Caption
-#. Designer..buttonCancel..Caption
 #: ClearTemp.gfm:152
 msgid "Cancel"
 msgstr "Zrušit"
 
-#. Designer..cbPqTemp..Hint
-#: ClearTemp.gfm:204
-msgid "Files in folder \\pq\\temp"
-msgstr "Soubory v adresáři \\pq\\temp"
+#. ClearTemp.ini [GeoGetUpdate] Label
+#: ClearTemp.ini:GeoGetUpdate:Label
+msgid "Temporary installation files of Geoget"
+msgstr "Dočasné instalační soubory GeoGetu"
 
-#. Designer..cbPqTemp..Caption
-#: ClearTemp.gfm:205
+#. ClearTemp.ini [GeoGetUpdate] Hint
+#: ClearTemp.ini:GeoGetUpdate:Hint
+msgid "Files in folder \\ggupdate"
+msgstr "Soubory v adresáři \\ggupdate"
+
+#. ClearTemp.ini [ScriptDownload] Label
+#: ClearTemp.ini:ScriptDownload:Label
+msgid "Temporary installation files of scripts"
+msgstr "Dočasné instalační soubory skriptů"
+
+#. ClearTemp.ini [ScriptDownload] Hint
+#: ClearTemp.ini:ScriptDownload:Hint
+msgid "Files in folder \\script_download"
+msgstr "Soubory v adresáři \\script_download"
+
+#. ClearTemp.ini [Temp] Label
+#: ClearTemp.ini:Temp:Label
+msgid "Other temporary files"
+msgstr "Ostatní dočasné soubory"
+
+#. ClearTemp.ini [Temp] Hint
+#: ClearTemp.ini:Temp:Hint
+msgid "Files in folder \\temp"
+msgstr "Soubory v adresáři \\temp"
+
+#. ClearTemp.ini [PQTemp] Label
+#: ClearTemp.ini:PQTemp:Label
 msgid "Pocket Query temporary files"
 msgstr "Dočasné soubory Pocket Query"
 
-#. Designer..cbOfflineCache..Hint
-#: ClearTemp.gfm:217
-msgid "Files in folder \\offline\\cache"
-msgstr "Soubory v adresáři \\offline\\cache"
+#. ClearTemp.ini [PQTemp] Hint
+#: ClearTemp.ini:PQTemp:Hint
+msgid "Files in folder \\pq\\temp"
+msgstr "Soubory v adresáři \\pq\\temp"
 
-#. Designer..cbOfflineCache..Caption
-#: ClearTemp.gfm:218
+#. ClearTemp.ini [OldFiles] Label
+#: ClearTemp.ini:OldFiles:Label
+msgid "Old versions of files"
+msgstr "Staré verze souborů"
+
+#. ClearTemp.ini [OldFiles] Hint
+#: ClearTemp.ini:OldFiles:Hint
+msgid "Files with *.old extension"
+msgstr "Soubory s příponou *.old"
+
+#. ClearTemp.ini [GeoGetLog] Label
+#: ClearTemp.ini:GeoGetLog:Label
+msgid "GeoGet LOG files"
+msgstr "Soubory záznamů činnosti"
+
+#. ClearTemp.ini [GeoGetLog] Hint
+#: ClearTemp.ini:GeoGetLog:Hint
+msgid "Files with *.log extension"
+msgstr "Soubory s příponou *.log"
+
+#. ClearTemp.ini [OfflineCache] Label
+#: ClearTemp.ini:OfflineCache:Label
 msgid "Listings for offline use older than"
 msgstr "Listingy pro offline použítí starší než"
 
-#. Designer..cbOfflineMaps..Hint
-#: ClearTemp.gfm:228
-msgid "Files in folder \\offline\\maps"
-msgstr "Soubory v adresáři \\offline\\maps"
+#. ClearTemp.ini [OfflineCache] Hint
+#: ClearTemp.ini:OfflineCache:Hint
+msgid "Files in folder \\offline\\cache"
+msgstr "Soubory v adresáři \\offline\\cache"
 
-#. Designer..cbOfflineMaps..Caption
-#: ClearTemp.gfm:229
+#. ClearTemp.ini [OfflineMaps] Label
+#: ClearTemp.ini:OfflineMaps:Label
 msgid "Map previews older than"
 msgstr "Náhledové mapy starší než"
 
-#. Designer..cbOfflineInc..Hint
-#: ClearTemp.gfm:239
-msgid "Files in folder \\offline\\inc"
-msgstr "Soubory v adresáři \\offline\\inc"
+#. ClearTemp.ini [OfflineMaps] Hint
+#: ClearTemp.ini:OfflineMaps:Hint
+msgid "Files in folder \\offline\\maps"
+msgstr "Soubory v adresáři \\offline\\maps"
 
-#. Designer..cbOfflineInc..Caption
-#: ClearTemp.gfm:240
+#. ClearTemp.ini [OfflineInc] Label
+#: ClearTemp.ini:OfflineInc:Label
 msgid "Pictures from listings older than"
 msgstr "Obrázky z listingů starší než"
 
-#. Designer..comboCache....Hint
-#. Designer..comboMaps....Hint
-#. Designer..comboInc....Hint
-#: ClearTemp.gfm:252
+#. ClearTemp.ini [OfflineInc] Hint
+#. ClearTemp.ini [SRTM] Hint
+#: ClearTemp.ini:OfflineInc:Hint ClearTemp.ini:SRTM:Hint
+msgid "Files in folder \\offline\\inc"
+msgstr "Soubory v adresáři \\offline\\inc"
+
+#. Combo hint used by every category with DaysOptions=
+#: ClearTemp.ggp.pas:BuildOptionsForm
 msgid ""
 "Empty value delete all files,\n"
 "-2 delete files which haven't parent point in database"
@@ -131,30 +132,120 @@ msgstr ""
 "Prázdná hodnota maže všechny soubory\n"
 "-2 maže soubory ke kterým neexistuje keš v databázi"
 
-#. Designer..cbLog..Hint
-#: ClearTemp.gfm:313
-msgid "Files with *.log extension"
-msgstr "Soubory s příponou *.log"
+#. ClearTemp.ini [SRTM] Label
+#: ClearTemp.ini:SRTM:Label
+msgid "Unneeded SRTM-related files"
+msgstr "Nepotřebné soubory související se SRTM"
 
-#. Designer..cbLog..Caption
-#: ClearTemp.gfm:314
-msgid "GeoGet LOG files"
-msgstr "Soubory záznamů činnosti"
+#. ClearTemp.ini [Attach] Label
+#: ClearTemp.ini:Attach:Label
+msgid "Attachments for geocaches no longer in the database"
+msgstr "Přílohy ke keším, které už nejsou v databázi"
 
-#. Designer..Label1..Caption
-#: ClearTempConfirm.gfm:22
-msgid "You can use Ctrl or Shift and click to multiple select."
-msgstr "Můžete použít Ctrl nebo Shift + klik pro vícenásobný výběr."
+#. ClearTemp.ini [Attach] Hint
+#: ClearTemp.ini:Attach:Hint
+msgid "Files in folder \\attach"
+msgstr "Soubory v adresáři \\attach"
 
-#. Designer..lblResult..Caption
-#: ClearTempConfirm.gfm:29
-msgid "Results"
-msgstr ""
+#. ClearTemp.ini [ScriptGeoKuk] Label
+#: ClearTemp.ini:ScriptGeoKuk:Label
+msgid "GeoKuk map tiles"
+msgstr "Mapové dlaždice z GeoKuku"
 
-#. Designer..buttonDelete..Caption
-#: ClearTempConfirm.gfm:36
-msgid "Delete"
-msgstr "Smazat"
+#. ClearTemp.ini [ScriptGeoKuk] Hint
+#: ClearTemp.ini:ScriptGeoKuk:Hint
+msgid "Files in folder \\srtm"
+msgstr "Soubory v adresáři \\srtm"
+
+#. ClearTemp.ini [ScriptCombine] Label
+#: ClearTemp.ini:ScriptCombine:Label
+msgid "Combine2 script temporary files"
+msgstr "Dočasné soubory skriptu Combine2"
+
+#. ClearTemp.ini [ScriptCombine] Hint
+#: ClearTemp.ini:ScriptCombine:Hint
+msgid "Files in folder \\script\\Combine2\\Temp"
+msgstr "Soubory v adresáři \\script\\Combine2\\Temp"
+
+#. ClearTemp.ini [ScriptDegree360] Label
+#: ClearTemp.ini:ScriptDegree360:Label
+msgid "Degree360 script temporary files"
+msgstr "Dočasné soubory skriptu Degree360"
+
+#. ClearTemp.ini [ScriptDegree360] Hint
+#: ClearTemp.ini:ScriptDegree360:Hint
+msgid "Files in folder \\script\\Degree360\\Tmp"
+msgstr "Soubory v adresáři \\script\\Degree360\\Tmp"
+
+#. ClearTemp.ini [ScriptDiscover] Label
+#: ClearTemp.ini:ScriptDiscover:Label
+msgid "Discover script temporary files"
+msgstr "Dočasné soubory skriptu Discover"
+
+#. ClearTemp.ini [ScriptDiscover] Hint
+#: ClearTemp.ini:ScriptDiscover:Hint
+msgid "Files in folder \\script\\discover\\temp"
+msgstr "Soubory v adresáři \\script\\discover\\temp"
+
+#. ClearTemp.ini [ScriptGeoJarry] Label
+#: ClearTemp.ini:ScriptGeoJarry:Label
+msgid "GeoJarry script temporary files"
+msgstr "Dočasné soubory skriptu GeoJarry"
+
+#. ClearTemp.ini [ScriptGeoJarry] Hint
+#: ClearTemp.ini:ScriptGeoJarry:Hint
+msgid "Files in folder \\script\\GeoJarry\\last"
+msgstr "Soubory v adresáři \\script\\GeoJarry\\last"
+
+#. ClearTemp.ini [ScriptLogator] Label
+#: ClearTemp.ini:ScriptLogator:Label
+msgid "Logator script temporary files"
+msgstr "Dočasné soubory skriptu Logator"
+
+#. ClearTemp.ini [ScriptLogator] Hint
+#: ClearTemp.ini:ScriptLogator:Hint
+msgid "Files in folder \\script\\Logator\\Tmp"
+msgstr "Soubory v adresáři \\script\\Logator\\Tmp"
+
+#. ClearTemp.ini [ScriptSeriesII] Label
+#: ClearTemp.ini:ScriptSeriesII:Label
+msgid "SeriesII script output file"
+msgstr "Výstupní soubor skriptu SeriesII"
+
+#. ClearTemp.ini [ScriptSeriesII] Hint
+#: ClearTemp.ini:ScriptSeriesII:Hint
+msgid "File \\script\\SeriesII\\output.html"
+msgstr "Soubor \\script\\SeriesII\\output.html"
+
+#. ClearTemp.ini [ScriptSpoiler] Label
+#: ClearTemp.ini:ScriptSpoiler:Label
+msgid "Spoiler script temporary files"
+msgstr "Dočasné soubory skriptu Spoiler"
+
+#. ClearTemp.ini [ScriptSpoiler] Hint
+#: ClearTemp.ini:ScriptSpoiler:Hint
+msgid "Files in folder \\script\\Spoiler"
+msgstr "Soubory v adresáři \\script\\Spoiler"
+
+#. ClearTemp.ini [ScriptStator] Label
+#: ClearTemp.ini:ScriptStator:Label
+msgid "Stator script temporary files"
+msgstr "Dočasné soubory skriptu Stator"
+
+#. ClearTemp.ini [ScriptStator] Hint
+#: ClearTemp.ini:ScriptStator:Hint
+msgid "Files in folder \\script\\Stator\\Tmp"
+msgstr "Soubory v adresáři \\script\\Stator\\Tmp"
+
+#. ClearTemp.ini [MtpToolLib] Label
+#: ClearTemp.ini:MtpToolLib:Label
+msgid "MtpToolLib temporary file"
+msgstr "Dočasný soubor MtpToolLib"
+
+#. ClearTemp.ini [MtpToolLib] Hint
+#: ClearTemp.ini:MtpToolLib:Hint
+msgid "File MtpToolLib.ini.tmp"
+msgstr "Soubor MtpToolLib.ini.tmp"
 
 #: ClearTemp.ggp.pas:22
 msgid "Clear Temp"
@@ -173,8 +264,8 @@ msgid "Searching files"
 msgstr "Hledám soubory"
 
 #: ClearTemp.ggp.pas:234
-msgid "Found %COUNT% items with total size %SIZE% kB"
-msgstr "Nalezeno %COUNT% souborů o celkové velikosti %SIZE% kB"
+msgid "Found %COUNT% items with total size %SIZE% MB"
+msgstr "Nalezeno %COUNT% souborů o celkové velikosti %SIZE% MB"
 
 #: ClearTemp.ggp.pas:240
 msgid "Clear Temp - Confirm results"
@@ -187,6 +278,24 @@ msgstr "Mažu soubory"
 #: ClearTemp.ggp.pas:257
 msgid "Clean up!"
 msgstr "Závěrečný úklid!"
+
+#. Designer..Label1..Caption
+#: ClearTempConfirm.gfm:22
+msgid "You can use Ctrl or Shift and click to multiple select."
+msgstr "Můžete použít Ctrl nebo Shift + klik pro vícenásobný výběr."
+
+#. Designer..lblResult..Caption
+#: ClearTempConfirm.gfm:29
+msgid "Results"
+msgstr ""
+
+#. Designer..buttonDelete..Caption
+#: ClearTempConfirm.gfm:36
+msgid "Delete"
+msgstr "Smazat"
+
+#~ msgid "days"
+#~ msgstr "dní"
 
 #~ msgid "items found"
 #~ msgstr "položek nalezeno"
