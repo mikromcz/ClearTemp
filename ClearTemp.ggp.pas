@@ -6,15 +6,19 @@
   Autor: mikrom, http://mikrom.cz
 
   Kategorie mazani (checkboxy v dialogu) se negeneruji staticky, ale nactou se za behu
-  ze dvou INI souboru:
+  ze dvou INI souboru, slouceniych dohromady v DefinitionsIni (viz BuildMergedDefinitions):
   - ClearTemp.definitions.ini - dodavane definice kategorii (sekce [Categories] + jednotlive
     sekce), format inspirovany CCleaner winapp2.ini (viz src/CCleaner_format.txt), popis
     klicu je primo v hlavicce tohoto souboru. Zahrnuje i Label_CS/Hint_CS pro cestinu.
-  - ClearTemp.ini - per-uzivatelsky stav ([LastState]) a [Settings] Language=CS/prazdne,
-    ktery rozhoduje jestli se pouzije Label_CS/Hint_CS nebo Label/Hint.
+  - ClearTemp.ini - per-uzivatelsky stav ([LastState]) a [Settings] Language=CS/prazdne.
+    Muze take obsahovat vlastni/prepsane kategorie - pri sloucenani maji tyto polozky
+    prednost pred ClearTemp.definitions.ini, takze aktualizace pluginu je nepřepíše.
+
+  Kategorie se v dialogu rozdeluji do zalozek podle prefixu nazvu sekce: GeoGet* -> zalozka
+  "GeoGet", Script* -> zalozka "Script", cokoliv jineho -> "Other" (viz TabNameForSection).
 
   Vyznam "dnu stari" (Days) u kategorie s DaysOptions:
-  -2 pokud neni v databazi (jen pokud ma kategorie AllowNotInDatabase=True)
+  -2 pokud neni v databazi (jen pokud ma kategorie AllowNotInDatabase=1)
   -1 vse
   0 ... 999 stari ve dnech
 }
@@ -25,11 +29,12 @@ uses
 var
   DatabaseIDList: TStringList;
   totalSize: integer;
-  SettingsIni: TIniFile;      // ClearTemp.ini - per-uzivatelsky stav (LastState, Language)
-  DefinitionsIni: TIniFile;   // ClearTemp.definitions.ini - dodavane definice kategorii
+  SettingsIni: TIniFile;        // ClearTemp.ini - per-uzivatelsky stav (LastState, Language, pripadne vlastni kategorie)
+  DefinitionsIni: TMemIniFile;  // slouceni ClearTemp.definitions.ini + ClearTemp.ini (viz BuildMergedDefinitions)
   CategoryCheckboxes: TStringList; // Strings = nazev sekce, Objects = TCheckBox
   CategoryCombos: TStringList;     // Strings = nazev sekce, Objects = TComboBox nebo nil
-  DebugLog: TStringList;      // DEBUG - odstranit az bude IsInDatabase overene
+  CategoryTabSheets: TStringList;  // Strings = nazev sekce, Objects = TTabSheet, do ktereho kategorie patri
+  TabInfo: TStringList;            // Strings = zakladni nazev zalozky, Objects = TTabSheet
 
 function PluginCaption: string;
 begin
@@ -43,7 +48,7 @@ end;
 
 function PluginIcon: string;
 begin
-  Result := DecodeBase64('Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAAAAAASCwAAEgsAAAABAAAAAQAAeHh4/3p6ev97e3v/fHx8/85oRv/TbUv/1HBO/9lzUf/lf13/135g/9yOcv/qhGL/6oZl/+6IZv/rkXP/3AD//4CAgP+BgYH/jIyM/4+Pj/+ZmZn/m5ub/56env+fn5//oaGh/6mpqf+rq6v/uaio/7qvr/+zs7P/tra2/+6ghf/koov/7KuU/82+of/CsLD/0L6+/87ApP/Qwqb/0cOo/9PFqv/Ux6z/1ciu/9bJsP/XyrH/2Myz/9nNtP/azrX/7828/8bExP/Hx8f/yMjI/8nJyf/fzc3/0dHR/+/Wx//v2cv/7t7O/+/ezv/x08X/8tPG//PVxv/x183/89nP/+/d3f/w4NH/8OLT//Di1P/x49X/8uPV//Xg1f/x5Nb/8uTX//fj2//z5tn/8+fc//Tn3f/06N7/9Orf/+Hh4f/16uD/9ezi//bs4//27OT/9u7m//fu5f/38Oj/+fTu//r18P/69vH/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/w8PFgMCAgEBAQECAgMWDw8PDxhPNjMxHBsjJDVAFw8PDw8eGRUUEwMAEBIVGR0PDw8PIlQ6TFdOSkE6OVEiDw8PDyVUOkxYVUtBOjlRJQ8PDw8mVDpNPgRSRzo5USYPDw8PJ1Q6UAUJBgo4OVEnDw8PDyhUOk0/B1M3IEJRKA8PDw8pVEQ8WFVSRzBDUSkPDw8PKlREIUlWCDtBOVEqDw8PDytUOkYfDA4LSDlRKw8PDw8sVDpMWVYNPUE5USwPDw8PLVQ6TFdQUEU6OVEtDw8PDy5UOkxXTkpBOjlRLg8PDw8vVDpMV05KQTo5US8PDw8PNBkVFBMDABETFhoyDw8=');
+  Result := DecodeBase64('Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAAAAAASCwAAEgsAAAABAAAAAQAAeHh4/3p6ev97e3v/fHx8/85oRv/TbUv/1HBO/9lzUf/lf13/135g/9yOcv/qhGL/6oZl/+6IZv/rkXP/3AD//4CAgP+BgYH/jIyM/4+Pj/+ZmZn/m5ub/56env+fn5//oaGh/6mpqf+rq6v/uaio/7qvr/+zs7P/tra2/+6ghf/koov/7KuU/82+of/CsLD/0L6+/87ApP/Qwqb/0cOo/9PFqv/Ux6z/1ciu/9bJsP/XyrH/2Myz/9nNtP/azrX/7828/8bExP/Hx8f/yMjI/8nJyf/fzc3/0dHR/+/Wx//v2cv/7t7O/+/ezv/x08X/8tPG//PVxv/x183/89nP/+/d3f/w4NH/8OLT//Di1P/x49X/8uPV//Xg1f/x5Nb/8uTX//fj2//z5tn/8+fc//Tn3f/06N7/9Orf/+Hh4f/16uD/9ezi//bs4//27OT/9u7m//fu5f/38Oj/+fTu//r18P/69vH/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/w8PFgMCAgEBAQECAgMWDw8PDxhPNjMxHBsjJDVAFw8PDw8eGRUUEwMAEBIVGR0PDw8PIlQ6TFdOSkE6OVEiDw8PDyVUOkxYVUtBOjlRJQ8PDw8mVDpNPgRSRzo5USYPDw8PJ1Q6UAUJBgo4OVEnDw8PDyhUOk0/B1M3IEJRKA8PDw8pVEQ8WFVSRzBDUSkPDw8PKlREIUlWCDtBOVEqDw8PDytUOkYfDA4LSDlRKw8PDw8sVDpMWVYNPUE5USwPDw8PLVQ6TFdQUEU6OVEtDw8PDy5UOkxXTkpBOjlRLg8PDw8vVDpMV05KQTo5US8PDw8PNBkVFBMDABETFhoyDw8=');
 end;
 
 function PluginFlags: string;
@@ -94,7 +99,6 @@ end;
 function IsInDatabase(files: string): boolean;
 var
   code: String;
-  foundStr: String;
   posLF, posCR, posBreak: Integer;
 begin
   code := RegexExtract('GC[A-Z0-9]+|WM[A-Z0-9]+|OC[A-Z0-9]+',files);
@@ -116,14 +120,6 @@ begin
     Result := false
   else
     Result := true;
-
-  {DEBUG - odstranit az bude IsInDatabase overene}
-  if DebugLog <> nil then
-  begin
-    if Result then foundStr := '1' else foundStr := '0';
-    DebugLog.Add(files + ' | code=[' + code + '] | found=' + foundStr);
-  end;
-  {/DEBUG}
 end;
 
 {obsluuje busy dialog a pridava do seznamu ke smazani}
@@ -175,6 +171,40 @@ begin
   end;
 end;
 
+{expanduje %GEOGET_DATADIR%/%GEOGET_SCRIPTDIR%/%GEOGET_COMMONDATADIR% a pripadne dalsi
+ %PROMENNE% (napr. %USERPROFILE%, %APPDATA%) pres GetEnvir - obecna promenna prostredi Windows}
+function ExpandPath(path: String): String;
+var
+  p1, p2, searchFrom: Integer;
+  varName, varValue, before, after: String;
+begin
+  Result := path;
+  Result := ReplaceString(Result, '%GEOGET_DATADIR%', GEOGET_DATADIR);
+  Result := ReplaceString(Result, '%GEOGET_SCRIPTDIR%', GEOGET_SCRIPTDIR);
+  Result := ReplaceString(Result, '%GEOGET_COMMONDATADIR%', GEOGET_COMMONDATADIR);
+
+  searchFrom := 1;
+  while True do
+  begin
+    p1 := Pos('%', Copy(Result, searchFrom, Length(Result)));
+    if p1 = 0 then Break;
+    p1 := searchFrom + p1 - 1;
+
+    p2 := Pos('%', Copy(Result, p1 + 1, Length(Result)));
+    if p2 = 0 then Break; {osamocene % bez uzavirajiciho znaku - nechame beze zmeny}
+    p2 := p1 + p2;
+
+    varName := Copy(Result, p1 + 1, p2 - p1 - 1);
+    varValue := GetEnvir(varName);
+
+    before := Copy(Result, 1, p1 - 1);
+    after := Copy(Result, p2 + 1, Length(Result));
+    Result := before + varValue + after;
+
+    searchFrom := Length(before) + Length(varValue) + 1;
+  end;
+end;
+
 {rozdeli FileKeyN=path|mask|flags na jednotlive casti a expanduje promenne v ceste}
 procedure ParseFileKey(value: string; var path, mask, flags: string);
 var
@@ -206,9 +236,7 @@ begin
     end;
   end;
 
-  path := ReplaceString(path, '%GEOGET_DATADIR%', GEOGET_DATADIR);
-  path := ReplaceString(path, '%GEOGET_SCRIPTDIR%', GEOGET_SCRIPTDIR);
-  path := ReplaceString(path, '%GEOGET_COMMONDATADIR%', GEOGET_COMMONDATADIR);
+  path := ExpandPath(path);
 end;
 
 {Hleda soubory v danem adresari (StartDir), volitelne vcetne podslozek (Recursive),
@@ -266,7 +294,7 @@ begin
 end;
 
 {nacte poradi kategorii ze sekce [Categories] (hodnota = vaha), serazene vzestupne}
-procedure LoadCategoryOrder(ini: TIniFile; list: TStringList);
+procedure LoadCategoryOrder(ini: TMemIniFile; list: TStringList);
 var
   raw, sortable: TStringList;
   i, weight: Integer;
@@ -293,21 +321,67 @@ begin
   end;
 end;
 
-{povoli/zakaze combo se starim podle stavu prislusneho checkboxu}
-procedure OnCategoryClick(sender: TObject);
-var
-  i: Integer;
-  combo: TComboBox;
+{urci zalozku podle prefixu nazvu sekce - GeoGet* / Script* / jinak Other}
+function TabNameForSection(section: String): String;
 begin
-  for i := 0 to CategoryCheckboxes.Count - 1 do
+  if Copy(section, 1, 6) = 'GeoGet' then Result := 'GeoGet'
+  else if Copy(section, 1, 6) = 'Script' then Result := 'Script'
+  else Result := 'Other';
+end;
+
+{tolerantni cteni boolean hodnoty z ini - akceptuje 1/0 i True/False, kdyby si nekdo splet konvenci}
+function ReadBoolLenient(ini: TMemIniFile; section, key: String; defaultValue: boolean): boolean;
+var
+  raw: String;
+begin
+  raw := UpperCase(Trim(ini.ReadString(section, key, '')));
+  if raw = '' then
   begin
-    if CategoryCheckboxes.Objects[i] = TObject(sender) then
+    Result := defaultValue;
+    Exit;
+  end;
+  Result := (raw = '1') or (raw = 'TRUE') or (raw = 'YES');
+end;
+
+{zjisti, jestli se ma kategorie zobrazit - DetectFile nebo DetectFile1..N (staci aby existoval
+ jeden z nich); pokud neni definovan zadny DetectFile(N), kategorie se zobrazi vzdy}
+function CategoryIsVisible(section: String): boolean;
+var
+  detectPath: String;
+  n: Integer;
+  anyDetectDefined: boolean;
+begin
+  anyDetectDefined := False;
+
+  detectPath := DefinitionsIni.ReadString(section, 'DetectFile', '');
+  if detectPath <> '' then
+  begin
+    anyDetectDefined := True;
+    detectPath := ExpandPath(detectPath);
+    if FileExists(detectPath) or DirectoryExists(detectPath) then
     begin
-      combo := TComboBox(CategoryCombos.Objects[i]);
-      if combo <> nil then combo.Enabled := TCheckBox(sender).Checked;
-      Break;
+      Result := True;
+      Exit;
     end;
   end;
+
+  n := 1;
+  detectPath := DefinitionsIni.ReadString(section, 'DetectFile' + IntToStr(n), '');
+  while detectPath <> '' do
+  begin
+    anyDetectDefined := True;
+    detectPath := ExpandPath(detectPath);
+    if FileExists(detectPath) or DirectoryExists(detectPath) then
+    begin
+      Result := True;
+      Exit;
+    end;
+
+    n := n + 1;
+    detectPath := DefinitionsIni.ReadString(section, 'DetectFile' + IntToStr(n), '');
+  end;
+
+  Result := not anyDetectDefined;
 end;
 
 {true, pokud ClearTemp.ini [Settings] Language=CS - pak se pouzivaji Label_CS/Hint_CS}
@@ -316,7 +390,18 @@ begin
   Result := UpperCase(Trim(SettingsIni.ReadString('Settings', 'Language', ''))) = 'CS';
 end;
 
-{vrati Label/Hint (nebo jejich _CS variantu) z ClearTemp.definitions.ini, bez gettext}
+{rozepise \n na skutecny zalom radku (CRLF); \\ pred tim ochranime jako doslovne zpetne
+ lomitko, aby se necekane nerozlomil text obsahujici napr. cestu \network (zacina na \n)}
+function UnescapeText(s: String): String;
+begin
+  s := ReplaceString(s, '\\', #1);
+  s := ReplaceString(s, '\n', CRLF);
+  s := ReplaceString(s, #1, '\');
+  Result := s;
+end;
+
+{vrati Label/Hint/Warning (nebo jejich _CS variantu) z DefinitionsIni, bez gettext;
+ \n v textu se rozepise na skutecny zalom radku (viz UnescapeText)}
 function LocalizedText(section, key: String): String;
 var
   csValue: String;
@@ -326,11 +411,58 @@ begin
     csValue := DefinitionsIni.ReadString(section, key + '_CS', '');
     if csValue <> '' then
     begin
-      Result := csValue;
+      Result := UnescapeText(csValue);
       Exit;
     end;
   end;
-  Result := DefinitionsIni.ReadString(section, key, '');
+  Result := UnescapeText(DefinitionsIni.ReadString(section, key, ''));
+end;
+
+{nastavi popisek zalozky na "zakladni nazev (pocet zaskrtnutych)"}
+procedure UpdateTabCaption(tabsheet: TTabSheet; baseCaption: String);
+var
+  i, count: Integer;
+begin
+  count := 0;
+  for i := 0 to CategoryCheckboxes.Count - 1 do
+    if (CategoryTabSheets.Objects[i] = TObject(tabsheet)) and TCheckBox(CategoryCheckboxes.Objects[i]).Checked then
+      count := count + 1;
+  tabsheet.Caption := baseCaption + ' (' + IntToStr(count) + ')';
+end;
+
+{povoli/zakaze combo se starim, zobrazi Warning= pri zaskrtnuti, aktualizuje popisek zalozky}
+procedure OnCategoryClick(sender: TObject);
+var
+  i, j: Integer;
+  combo: TComboBox;
+  tabsheet: TTabSheet;
+  section, warningText: String;
+begin
+  for i := 0 to CategoryCheckboxes.Count - 1 do
+  begin
+    if CategoryCheckboxes.Objects[i] = TObject(sender) then
+    begin
+      section := CategoryCheckboxes[i];
+
+      combo := TComboBox(CategoryCombos.Objects[i]);
+      if combo <> nil then combo.Enabled := TCheckBox(sender).Checked;
+
+      if TCheckBox(sender).Checked then
+      begin
+        warningText := LocalizedText(section, 'Warning');
+        if warningText <> '' then ShowMessage(ExpandPath(warningText));
+      end;
+
+      tabsheet := TTabSheet(CategoryTabSheets.Objects[i]);
+      for j := 0 to TabInfo.Count - 1 do
+        if TabInfo.Objects[j] = TObject(tabsheet) then
+        begin
+          UpdateTabCaption(tabsheet, TabInfo[j]);
+          Break;
+        end;
+      Break;
+    end;
+  end;
 end;
 
 {prevede bajty na text v MB se 2 desetinnymi misty (bez FormatFloat)}
@@ -368,7 +500,7 @@ var
   val: Integer;
   allowNotInDb: boolean;
 begin
-  allowNotInDb := DefinitionsIni.ReadBool(section, 'AllowNotInDatabase', False);
+  allowNotInDb := ReadBoolLenient(DefinitionsIni, section, 'AllowNotInDatabase', False);
 
   if combo = nil then
   begin
@@ -389,39 +521,100 @@ begin
   Result := val;
 end;
 
-{sestavi seznam kategorii z ClearTemp.definitions.ini a vytvori pro ne checkboxy (+ combo dnu) ve scrollCategories}
+{slouci ClearTemp.definitions.ini (dodavane) a ClearTemp.ini (uzivatelske pridavky/prepisy)
+ do DefinitionsIni - stejna sekce+klic v ClearTemp.ini ma prednost pred dodavanou hodnotou}
+procedure BuildMergedDefinitions;
+var
+  shipped: TIniFile;
+  sections, ident: TStringList;
+  j, k: Integer;
+begin
+  sections := TStringList.Create;
+  ident := TStringList.Create;
+  try
+    shipped := TIniFile.Create(GEOGET_SCRIPTDIR + '\ClearTemp\ClearTemp.definitions.ini');
+    try
+      shipped.ReadSections(sections);
+      for j := 0 to sections.Count - 1 do
+      begin
+        ident.Clear;
+        shipped.ReadSection(sections[j], ident);
+        for k := 0 to ident.Count - 1 do
+          DefinitionsIni.WriteString(sections[j], ident[k], shipped.ReadString(sections[j], ident[k], ''));
+      end;
+    finally
+      shipped.Free;
+    end;
+
+    sections.Clear;
+    SettingsIni.ReadSections(sections);
+    for j := 0 to sections.Count - 1 do
+    begin
+      ident.Clear;
+      SettingsIni.ReadSection(sections[j], ident);
+      for k := 0 to ident.Count - 1 do
+        DefinitionsIni.WriteString(sections[j], ident[k], SettingsIni.ReadString(sections[j], ident[k], ''));
+    end;
+  finally
+    sections.Free;
+    ident.Free;
+  end;
+end;
+
+{sestavi zalozky (podle prefixu nazvu sekce) a v nich checkboxy (+ combo dnu) kategorii}
 procedure BuildOptionsForm;
 var
-  order: TStringList;
-  i, top: Integer;
-  section, detectFile, daysOptions, hintText, labelText, daysDefault: String;
+  order, tabScrollBoxes, tabTops: TStringList;
+  i, top, tabIdx, maxTop, pageControlHeight: Integer;
+  section, tabName, daysOptions, hintText, labelText, daysDefault: String;
   chk: TCheckBox;
   combo: TComboBox;
   checked: boolean;
+  tabsheet: TTabSheet;
+  scrollbox: TScrollBox;
 begin
-  {smazani pripadnych checkboxu/combo z predchoziho spusteni pluginu}
-  while ClearTempOptions_scrollCategories.ControlCount > 0 do
-    ClearTempOptions_scrollCategories.Controls[0].Free;
+  {smazani pripadnych zalozek z predchoziho spusteni pluginu}
+  while ClearTempOptions_pcCategories.ControlCount > 0 do
+    ClearTempOptions_pcCategories.Controls[0].Free;
 
   order := TStringList.Create;
+  tabScrollBoxes := TStringList.Create;
+  tabTops := TStringList.Create;
   try
     LoadCategoryOrder(DefinitionsIni, order);
 
-    top := 4;
     for i := 0 to order.Count - 1 do
     begin
       section := order[i];
+      if not CategoryIsVisible(section) then Continue;
 
-      detectFile := DefinitionsIni.ReadString(section, 'DetectFile', '');
-      detectFile := ReplaceString(detectFile, '%GEOGET_DATADIR%', GEOGET_DATADIR);
-      detectFile := ReplaceString(detectFile, '%GEOGET_SCRIPTDIR%', GEOGET_SCRIPTDIR);
-      detectFile := ReplaceString(detectFile, '%GEOGET_COMMONDATADIR%', GEOGET_COMMONDATADIR);
-      if (detectFile <> '') and not FileExists(detectFile) and not DirectoryExists(detectFile) then Continue;
+      tabName := TabNameForSection(section);
+      tabIdx := tabScrollBoxes.IndexOf(tabName);
+      if tabIdx = -1 then
+      begin
+        tabsheet := TTabSheet.Create(ClearTempOptions_pcCategories);
+        tabsheet.Caption := tabName;
+        tabsheet.PageControl := ClearTempOptions_pcCategories;
+
+        scrollbox := TScrollBox.Create(tabsheet);
+        scrollbox.Align := alClient;
+        scrollbox.AutoScroll := True;
+        scrollbox.Parent := tabsheet;
+
+        TabInfo.AddObject(tabName, tabsheet);
+        tabScrollBoxes.AddObject(tabName, scrollbox);
+        tabTops.Add('4');
+        tabIdx := tabScrollBoxes.Count - 1;
+      end;
+
+      scrollbox := TScrollBox(tabScrollBoxes.Objects[tabIdx]);
+      tabsheet := TTabSheet(TabInfo.Objects[tabIdx]);
+      top := StrToIntDef(tabTops[tabIdx], 4);
 
       daysOptions := DefinitionsIni.ReadString(section, 'DaysOptions', '');
 
-      chk := TCheckBox.Create(ClearTempOptions_scrollCategories);
-      chk.Parent := ClearTempOptions_scrollCategories;
+      chk := TCheckBox.Create(scrollbox);
+      chk.Parent := scrollbox;
       chk.Left := 5;
       chk.Top := top;
       if daysOptions <> '' then chk.Width := 215 else chk.Width := 290;
@@ -437,18 +630,19 @@ begin
       chk.ParentShowHint := False;
       if hintText <> '' then chk.Hint := hintText;
 
-      checked := SettingsIni.ReadBool('LastState', section + '_Checked', DefinitionsIni.ReadBool(section, 'Default', False));
+      checked := SettingsIni.ReadBool('LastState', section + '_Checked', ReadBoolLenient(DefinitionsIni, section, 'Default', False));
       chk.Checked := checked;
       chk.OnClick := @OnCategoryClick;
 
       CategoryCheckboxes.AddObject(section, chk);
+      CategoryTabSheets.AddObject(section, tabsheet);
 
       if daysOptions <> '' then
       begin
-        combo := TComboBox.Create(ClearTempOptions_scrollCategories);
-        combo.Parent := ClearTempOptions_scrollCategories;
+        combo := TComboBox.Create(scrollbox);
+        combo.Parent := scrollbox;
         combo.Name := 'combo_' + section;
-        combo.Left := 305;
+        combo.Left := 225;
         combo.Top := top - 3;
         combo.Width := 50;
         combo.Height := 24;
@@ -467,9 +661,30 @@ begin
         CategoryCombos.AddObject(section, nil);
 
       top := top + 24;
+      tabTops[tabIdx] := IntToStr(top);
     end;
+
+    {dynamicka vyska formulare podle nejvyssi zalozky, max cca 900px}
+    maxTop := 4;
+    for i := 0 to tabTops.Count - 1 do
+      if StrToIntDef(tabTops[i], 4) > maxTop then maxTop := StrToIntDef(tabTops[i], 4);
+
+    pageControlHeight := maxTop + 34; {rezerva na zahlavi zalozek}
+    if pageControlHeight < 290 then pageControlHeight := 290;
+    if pageControlHeight > 800 then pageControlHeight := 800; {900 minus zbytek formulare}
+
+    ClearTempOptions_pcCategories.Height := pageControlHeight;
+    ClearTempOptions.Height := 30 + pageControlHeight + 77;
+    ClearTempOptions_buttonOk.Top := 30 + pageControlHeight + 10;
+    ClearTempOptions_buttonCancel.Top := ClearTempOptions_buttonOk.Top;
+
+    {pocatecni popisky zalozek s poctem zaskrtnutych}
+    for i := 0 to TabInfo.Count - 1 do
+      UpdateTabCaption(TTabSheet(TabInfo.Objects[i]), TabInfo[i]);
   finally
     order.Free;
+    tabScrollBoxes.Free;
+    tabTops.Free;
   end;
 end;
 
@@ -484,12 +699,16 @@ var
 begin
   CategoryCheckboxes := TStringList.Create;
   CategoryCombos := TStringList.Create;
+  CategoryTabSheets := TStringList.Create;
+  TabInfo := TStringList.Create;
   SweepFolders := TStringList.Create;
   DatabaseIDList := nil;
-  DebugLog := nil;
   SettingsIni := TIniFile.Create(GEOGET_SCRIPTDIR + '\ClearTemp\ClearTemp.ini');
-  DefinitionsIni := TIniFile.Create(GEOGET_SCRIPTDIR + '\ClearTemp\ClearTemp.definitions.ini');
+  DefinitionsIni := TMemIniFile.Create(GEOGET_SCRIPTDIR + '\ClearTemp\definitions.merged.tmp.ini');
   try
+    {slouceni dodavanych definic s pripadnymi uzivatelskymi pridavky/prepisy}
+    BuildMergedDefinitions;
+
     {dvojklik v seznamu ke smazani otevre adresar se souborem}
     ClearTempConfirmDelete_lbDeleteFiles.OnDblClick := @OnDeleteListDblClick;
 
@@ -514,10 +733,6 @@ begin
     begin
       DatabaseIDList := TStringList.Create;
       GEOGET_DB.GetTableStrings('SELECT distinct id FROM geocache', DatabaseIDList);
-
-      {DEBUG - odstranit az bude IsInDatabase overene}
-      DebugLog := TStringList.Create;
-      {/DEBUG}
     end;
 
     {hledani souboru + ulozeni stavu vsech kategorii do ClearTemp.ini}
@@ -576,16 +791,13 @@ begin
       end;
     end;
 
-    {smazani prazdnych slozek - cesty jsou definovany v ClearTemp.definitions.ini [Settings] EmptyFolderSweep1..N}
+    {smazani prazdnych slozek - cesty jsou definovany v [Settings] EmptyFolderSweep1..N (pokud existuji)}
     GeoBusyCaption(_('Clean up!'));
     n := 1;
     sweepPath := DefinitionsIni.ReadString('Settings', 'EmptyFolderSweep' + IntToStr(n), '');
     while sweepPath <> '' do
     begin
-      sweepPath := ReplaceString(sweepPath, '%GEOGET_DATADIR%', GEOGET_DATADIR);
-      sweepPath := ReplaceString(sweepPath, '%GEOGET_SCRIPTDIR%', GEOGET_SCRIPTDIR);
-      sweepPath := ReplaceString(sweepPath, '%GEOGET_COMMONDATADIR%', GEOGET_COMMONDATADIR);
-      DeleteEmptyFolders(sweepPath);
+      DeleteEmptyFolders(ExpandPath(sweepPath));
 
       n := n + 1;
       sweepPath := DefinitionsIni.ReadString('Settings', 'EmptyFolderSweep' + IntToStr(n), '');
@@ -600,15 +812,10 @@ begin
       DatabaseIDList.Free;
       DatabaseIDList := nil;
     end;
-    {DEBUG - odstranit az bude IsInDatabase overene}
-    if DebugLog <> nil then
-    begin
-      DebugLog.Free;
-      DebugLog := nil;
-    end;
-    {/DEBUG}
     CategoryCheckboxes.Free;
     CategoryCombos.Free;
+    CategoryTabSheets.Free;
+    TabInfo.Free;
     SweepFolders.Free;
     SettingsIni.Free;
     DefinitionsIni.Free;

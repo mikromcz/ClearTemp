@@ -1,3 +1,15 @@
+=== 0.3.1 (2026/07/03) ===
+  * Oprava: hledání kešky v databázi (-2, např. u osiřelých příloh) selhávalo u souborů, jejichž název náhodou obsahoval podřetězec podobný kódu kešky (např. "NOCNI" obsahuje "OCNI") - bere se nyní jen první nalezená shoda odpovídající adresáři s kódem kešky
+  * REMOVESELF u FileKeyN nyní opravdu maže i prázdnou složku pro zaškrtnuté kategorie (dřív dělal totéž co RECURSE)
+  * Podpora DetectFile1..N - kategorie se zobrazí, pokud existuje alespoň jeden z uvedených souborů/adresářů
+  * Nový klíč Warning=/Warning_CS= - zobrazí upozornění při zaškrtnutí kategorie
+  * Cesty nyní podporují i běžné proměnné prostředí Windows (%USERPROFILE%, %APPDATA% apod.), nejen %GEOGET_DATADIR%/%GEOGET_SCRIPTDIR%/%GEOGET_COMMONDATADIR%
+  * Default=/AllowNotInDatabase= nyní tolerují i zápis True/False, nejen 1/0
+  * ClearTemp.ini nyní může obsahovat i vlastní/přepsané kategorie - při spuštění se sloučí s dodávanými definicemi, takže aktualizace pluginu je nepřepíše
+  * Dialog s nastavením je rozdělený do záložek (GeoGet/Script/Ostatní) podle názvu kategorie, se zaškrtnutým počtem v názvu záložky
+  * Výška dialogu se přizpůsobuje počtu kategorií (do cca 900px), aby nebylo potřeba scrollovat kolečkem myši (to v tomto enginu u TScrollBoxu nefunguje)
+  * Label=/Hint=/Warning= (i jejich _CS varianty) podporují zalomení řádku pomocí \n
+
 === 0.3.0 (2026/07/03) ===
   * Kategorie mazání se nyní načtou dynamicky ze souboru ClearTemp.definitions.ini (formát inspirovaný CCleaner winapp2.ini) místo pevně dané nabídky checkboxů
   * Přibyla podpora dalších kategorií pro dočasné soubory jiných skriptů (Combine2, Degree360, Discover, GeoJarry, Logator, SeriesII, Spoiler, Stator, MtpToolLib, SRTM, přílohy k neexistujícím keším), automaticky skryté pokud daný skript není nainstalován

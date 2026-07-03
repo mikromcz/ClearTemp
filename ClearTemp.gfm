@@ -23,7 +23,7 @@ object Designer: TJvDesignPanel
     Height = 16
     Caption = 'What do you want to clean?'
   end
-  object scrollCategories: TScrollBox
+  object pcCategories: TPageControl
     Left = 10
     Top = 30
     Width = 380
