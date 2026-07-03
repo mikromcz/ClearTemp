@@ -1,0 +1,229 @@
+Class TColList
+==============
+
+[Description](#@Description)
+
+[Hierarchy](#@Hierarchy)
+
+Fields
+
+[Methods](#@Methods)
+
+[Properties](#@Properties)
+
+Unit
+----
+
+[geocol](geocol.html)
+
+Declaration
+-----------
+
+`type TColList = class(TObjectList)`
+
+Description
+-----------
+
+Hierarchy
+---------
+
+*   TObjectList
+*   TColList
+
+Overview
+--------
+
+### Methods
+
+[![Public](public.gif "Public")](legend.html)
+
+`constructor **[create](geocol.TColList.html#create)**;`
+
+[![Public](public.gif "Public")](legend.html)
+
+`procedure **[Free](geocol.TColList.html#Free)**;`
+
+[![Public](public.gif "Public")](legend.html)
+
+`procedure **[AssignList](geocol.TColList.html#AssignList)**(value: [TColList](geocol.TColList.html));`
+
+[![Public](public.gif "Public")](legend.html)
+
+`procedure **[LoadFromFile](geocol.TColList.html#LoadFromFile)**(value: string);`
+
+[![Public](public.gif "Public")](legend.html)
+
+`procedure **[LoadByName](geocol.TColList.html#LoadByName)**(value: string);`
+
+[![Public](public.gif "Public")](legend.html)
+
+`procedure **[SaveToFile](geocol.TColList.html#SaveToFile)**(value: string);`
+
+[![Public](public.gif "Public")](legend.html)
+
+`procedure **[LoadDefault](geocol.TColList.html#LoadDefault)**;`
+
+[![Public](public.gif "Public")](legend.html)
+
+`procedure **[GetColList](geocol.TColList.html#GetColList)**(const value: Tstrings);`
+
+[![Public](public.gif "Public")](legend.html)
+
+`procedure **[Delete](geocol.TColList.html#Delete)**(Index: Integer);`
+
+[![Public](public.gif "Public")](legend.html)
+
+`function **[Add](geocol.TColList.html#Add)**(AObject: [TColRec](geocol.TColRec.html)): Integer;`
+
+[![Public](public.gif "Public")](legend.html)
+
+`procedure **[Insert](geocol.TColList.html#Insert)**(Index: Integer; AObject: [TColRec](geocol.TColRec.html));`
+
+### Properties
+
+[![Public](public.gif "Public")](legend.html)
+
+`property **[Items](geocol.TColList.html#Items)**[Index: Integer]: [TColRec](geocol.TColRec.html) read GetItem write SetItem;`
+
+[![Public](public.gif "Public")](legend.html)
+
+`property **[Count](geocol.TColList.html#Count)**: Integer read GetCount;`
+
+[![Public](public.gif "Public")](legend.html)
+
+`property **[Filename](geocol.TColList.html#Filename)**: string read fFilename write fFilename;`
+
+[![Public](public.gif "Public")](legend.html)
+
+`property **[FriendlyName](geocol.TColList.html#FriendlyName)**: string read fFriendlyName write fFriendlyName;`
+
+[![Public](public.gif "Public")](legend.html)
+
+`property **[Column](geocol.TColList.html#Column)**: TColumnIndex read fColumn write fColumn;`
+
+[![Public](public.gif "Public")](legend.html)
+
+`property **[Direction](geocol.TColList.html#Direction)**: TSortDirection read fDirection write fDirection;`
+
+[![Public](public.gif "Public")](legend.html)
+
+`property **[SortDirMode](geocol.TColList.html#SortDirMode)**: boolean read fSortDirMode write fSortDirMode;`
+
+Description
+-----------
+
+### Methods
+
+[![Public](public.gif "Public")](legend.html)
+
+`constructor **create**;`
+
+ 
+
+[![Public](public.gif "Public")](legend.html)
+
+`procedure **Free**;`
+
+ 
+
+[![Public](public.gif "Public")](legend.html)
+
+`procedure **AssignList**(value: [TColList](geocol.TColList.html));`
+
+ 
+
+[![Public](public.gif "Public")](legend.html)
+
+`procedure **LoadFromFile**(value: string);`
+
+ 
+
+[![Public](public.gif "Public")](legend.html)
+
+`procedure **LoadByName**(value: string);`
+
+ 
+
+[![Public](public.gif "Public")](legend.html)
+
+`procedure **SaveToFile**(value: string);`
+
+ 
+
+[![Public](public.gif "Public")](legend.html)
+
+`procedure **LoadDefault**;`
+
+ 
+
+[![Public](public.gif "Public")](legend.html)
+
+`procedure **GetColList**(const value: Tstrings);`
+
+ 
+
+[![Public](public.gif "Public")](legend.html)
+
+`procedure **Delete**(Index: Integer);`
+
+ 
+
+[![Public](public.gif "Public")](legend.html)
+
+`function **Add**(AObject: [TColRec](geocol.TColRec.html)): Integer;`
+
+ 
+
+[![Public](public.gif "Public")](legend.html)
+
+`procedure **Insert**(Index: Integer; AObject: [TColRec](geocol.TColRec.html));`
+
+ 
+
+### Properties
+
+[![Public](public.gif "Public")](legend.html)
+
+`property **Items**[Index: Integer]: [TColRec](geocol.TColRec.html) read GetItem write SetItem;`
+
+ 
+
+[![Public](public.gif "Public")](legend.html)
+
+`property **Count**: Integer read GetCount;`
+
+ 
+
+[![Public](public.gif "Public")](legend.html)
+
+`property **Filename**: string read fFilename write fFilename;`
+
+ 
+
+[![Public](public.gif "Public")](legend.html)
+
+`property **FriendlyName**: string read fFriendlyName write fFriendlyName;`
+
+ 
+
+[![Public](public.gif "Public")](legend.html)
+
+`property **Column**: TColumnIndex read fColumn write fColumn;`
+
+ 
+
+[![Public](public.gif "Public")](legend.html)
+
+`property **Direction**: TSortDirection read fDirection write fDirection;`
+
+ 
+
+[![Public](public.gif "Public")](legend.html)
+
+`property **SortDirMode**: boolean read fSortDirMode write fSortDirMode;`
+
+ 
+
+* * *
+
+_Generated by [PasDoc 0.9.0](http://pasdoc.sourceforge.net/) on 2018-03-13 21:07:27_
