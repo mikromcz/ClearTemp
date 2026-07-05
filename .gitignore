@@ -10,6 +10,9 @@ Thumbs.db
 # VisualStudio
 .vscode/
 
+# Claude
+.claude/
+
 # GeoGet
 /locale/CS/LC_MESSAGES/default.po~
 /locale/tools/
