@@ -4,6 +4,8 @@
 
   Puvodni verze: ProKesTom, http://www.geocaching.cz/forum/viewthread.php?forum_id=20&thread_id=17432&pid=251781#post_251781
   Autor: mikrom, http://mikrom.cz
+  Fórum: https://forum.geocaching.cz/t/clearcache-cleartemp-plugin-pro-mazani-nepotrebnych-souboru/16523
+  Verze: 0.3.1
 
   Kategorie mazani (checkboxy v dialogu) se negeneruji staticky, ale nactou se za behu
   ze dvou INI souboru, slouceniych dohromady v DefinitionsIni (viz BuildMergedDefinitions):
@@ -29,12 +31,16 @@ uses
 var
   DatabaseIDList: TStringList;
   totalSize: integer;
-  SettingsIni: TIniFile;        // ClearTemp.ini - per-uzivatelsky stav (LastState, Language, pripadne vlastni kategorie)
-  DefinitionsIni: TMemIniFile;  // slouceni ClearTemp.definitions.ini + ClearTemp.ini (viz BuildMergedDefinitions)
-  CategoryCheckboxes: TStringList; // Strings = nazev sekce, Objects = TCheckBox
-  CategoryCombos: TStringList;     // Strings = nazev sekce, Objects = TComboBox nebo nil
-  CategoryTabSheets: TStringList;  // Strings = nazev sekce, Objects = TTabSheet, do ktereho kategorie patri
-  TabInfo: TStringList;            // Strings = zakladni nazev zalozky, Objects = TTabSheet
+  SettingsIni: TIniFile;            // ClearTemp.ini - Per-uzivatelsky stav (LastState, Language, pripadne vlastni kategorie)
+  DefinitionsIni: TMemIniFile;      // Slouceni ClearTemp.definitions.ini + ClearTemp.ini (viz BuildMergedDefinitions)
+  CategoryCheckboxes: TStringList;  // Strings = Nazev sekce, Objects = TCheckBox
+  CategoryCombos: TStringList;      // Strings = Nazev sekce, Objects = TComboBox nebo nil
+  CategoryTabSheets: TStringList;   // Strings = Nazev sekce, Objects = TTabSheet, do ktereho kategorie patri
+  TabInfo: TStringList;             // Strings = Zakladni nazev zalozky, Objects = TTabSheet
+
+// ==============================================================================
+//   Metadata pluginu (volana GeoGetem)
+// ==============================================================================
 
 function PluginCaption: string;
 begin
@@ -56,7 +62,13 @@ begin
   Result := 'toolbar';
 end;
 
-{Clean-up, smazani prazdnych adresaru}
+// ==============================================================================
+//  Pomocne funkce: prace se soubory a cestami
+// ==============================================================================
+
+{
+  Clean-up, smazani prazdnych adresaru - rekurzivne prochazi adresarovou strukturu a maze prazdne slozky
+}
 procedure DeleteEmptyFolders(StartDir: string);
 var
    Files,Queue,tmp: TStringList;
@@ -95,7 +107,9 @@ begin
   end;
 end;
 
-{testuje zda je kes v databazi. GCxxxx, WMxxxx, OCxxxx}
+{
+  Testuje zda je kes v databazi. GCxxxx, WMxxxx, OCxxxx
+}
 function IsInDatabase(files: string): boolean;
 var
   code: String;
@@ -103,10 +117,12 @@ var
 begin
   code := RegexExtract('GC[A-Z0-9]+|WM[A-Z0-9]+|OC[A-Z0-9]+',files);
 
-  {RegexExtract muze vratit vice nalezenych shod spojenych znakem noveho radku (napr. kdyz
-   se vzor GC/WM/OC nahodou objevi i v nazvu souboru, ne jen v adresarove strukture) -
-   pouzijeme jen prvni nalezenou shodu, ktera odpovida adresari s kodem kese. Hledame
-   nejdrivejsi vyskyt CR nebo LF, aby po oriznuti nezustal "zavlecen" znak CR pred LF.}
+  {
+    RegexExtract muze vratit vice nalezenych shod spojenych znakem noveho radku (napr. kdyz
+    se vzor GC/WM/OC nahodou objevi i v nazvu souboru, ne jen v adresarove strukture) -
+    pouzijeme jen prvni nalezenou shodu, ktera odpovida adresari s kodem kese. Hledame
+    nejdrivejsi vyskyt CR nebo LF, aby po oriznuti nezustal "zavlecen" znak CR pred LF.
+  }
   posLF := Pos(#10, code);
   posCR := Pos(#13, code);
   if (posLF > 0) and ((posCR = 0) or (posLF < posCR)) then
@@ -122,7 +138,9 @@ begin
     Result := true;
 end;
 
-{obsluuje busy dialog a pridava do seznamu ke smazani}
+{
+  Obsluhuje busy dialog a pridava do seznamu ke smazani nalezene soubory, pocita celkovou velikost
+}
 procedure ProcessFile(files: string);
 begin
   GeoBusyKind(ReplaceString(files,GEOGET_DATADIR,''));
@@ -130,7 +148,9 @@ begin
   totalSize := totalSize + GetFileSize(files);
 end;
 
-{otestuje jestli jmeno souboru odpovida jednoduche masce (*.*, *.old, presne jmeno)}
+{
+  Testuje jestli jmeno souboru odpovida jednoduche masce (*.*, *.old, presne jmeno)
+}
 function FileMatchesMask(fileName, mask: string): boolean;
 var
   pattern, justName: string;
@@ -148,7 +168,9 @@ begin
   Result := RegexFind('^' + pattern + '$', justName);
 end;
 
-{rozdeli seznam oddeleny carkou (napr. DaysOptions=7,14,30) do target}
+{
+  Rozdeli seznam oddeleny carkou (napr. DaysOptions=7,14,30) do target
+}
 procedure SplitCommaList(s: String; target: TStrings);
 var
   p: Integer;
@@ -171,8 +193,10 @@ begin
   end;
 end;
 
-{expanduje %GEOGET_DATADIR%/%GEOGET_SCRIPTDIR%/%GEOGET_COMMONDATADIR% a pripadne dalsi
- %PROMENNE% (napr. %USERPROFILE%, %APPDATA%) pres GetEnvir - obecna promenna prostredi Windows}
+{
+  Expanduje %GEOGET_DATADIR%/%GEOGET_SCRIPTDIR%/%GEOGET_COMMONDATADIR% a pripadne dalsi
+  %PROMENNE% (napr. %USERPROFILE%, %APPDATA%) pres GetEnvir - obecna promenna prostredi Windows
+}
 function ExpandPath(path: String): String;
 var
   p1, p2, searchFrom: Integer;
@@ -191,7 +215,7 @@ begin
     p1 := searchFrom + p1 - 1;
 
     p2 := Pos('%', Copy(Result, p1 + 1, Length(Result)));
-    if p2 = 0 then Break; {osamocene % bez uzavirajiciho znaku - nechame beze zmeny}
+    if p2 = 0 then Break; // Osamocene % bez uzavirajiciho znaku - nechame beze zmeny
     p2 := p1 + p2;
 
     varName := Copy(Result, p1 + 1, p2 - p1 - 1);
@@ -205,7 +229,9 @@ begin
   end;
 end;
 
-{rozdeli FileKeyN=path|mask|flags na jednotlive casti a expanduje promenne v ceste}
+{
+  Rozdeli FileKeyN=path|mask|flags na jednotlive casti a expanduje promenne v ceste
+}
 procedure ParseFileKey(value: string; var path, mask, flags: string);
 var
   p1, p2: integer;
@@ -239,10 +265,12 @@ begin
   path := ExpandPath(path);
 end;
 
-{Hleda soubory v danem adresari (StartDir), volitelne vcetne podslozek (Recursive),
- podle jednoduche masky (Mask). Nalezene soubory se filtruji podle Days stejne
- jako drive (-2 = neni v databazi, -1 = vse, 1..N = stari ve dnech; 0 se v ResolveDays
- uz prevede na -1).}
+{
+  Hleda soubory v danem adresari (StartDir), volitelne vcetne podslozek (Recursive),
+  podle jednoduche masky (Mask). Nalezene soubory se filtruji podle Days stejne
+  jako drive (-2 = neni v databazi, -1 = vse, 1..N = stari ve dnech; 0 se v ResolveDays
+  uz prevede na -1).
+}
 procedure SearchFileKey(StartDir, Mask: String; Recursive: boolean; Days: Integer);
 var
    Files,Queue: TStringList;
@@ -270,9 +298,9 @@ begin
           if FileMatchesMask(Files[n], Mask) then
           begin
             case Days of
-              -2:   if not IsInDatabase(Files[n]) then ProcessFile(Files[n]); // pokud neexistuje v databazi odpovidajici kes
+              -2:   if not IsInDatabase(Files[n]) then ProcessFile(Files[n]); // Pokud neexistuje v databazi odpovidajici kes
               -1:   ProcessFile(Files[n]); // vse
-              else  if (GetFileTime(Files[n]) <= (Now() - Days)) then ProcessFile(Files[n]); // starsi nez zadany pocet dni
+              else  if (GetFileTime(Files[n]) <= (Now() - Days)) then ProcessFile(Files[n]); // Starsi nez zadany pocet dni
             end;
           end;
         end;
@@ -284,7 +312,13 @@ begin
   end;
 end;
 
-{doplni cislo nulami zleva na 6 mist, aby se dalo poradi kategorii razeni jako text}
+// ==============================================================================
+//  Pomocne funkce: kategorie - razeni, viditelnost, lokalizace
+// ==============================================================================
+
+{
+  Doplni cislo nulami zleva na 6 mist, aby se dalo poradi kategorii razeni jako text (viz LoadCategoryOrder)
+}
 function ZeroPad(n: Integer): String;
 var
   s: String;
@@ -294,7 +328,11 @@ begin
   Result := s;
 end;
 
-{nacte poradi kategorii ze sekce [Categories] (hodnota = vaha), serazene vzestupne}
+{
+  Nacte poradi kategorii ze sekce [Categories] (hodnota = vaha), serazene vzestupne do list
+  (Strings = nazev sekce, Objects = nil). Pokud je v [Categories] definovana kategorie, ktera
+  nema definovanou sekci, je ignorovana.
+}
 procedure LoadCategoryOrder(ini: TMemIniFile; list: TStringList);
 var
   raw, sortable: TStringList;
@@ -322,7 +360,9 @@ begin
   end;
 end;
 
-{urci zalozku podle prefixu nazvu sekce - GeoGet* / Script* / jinak Other}
+{
+  Urci zalozku podle prefixu nazvu sekce - GeoGet* / Script* / jinak Other
+}
 function TabNameForSection(section: String): String;
 begin
   if Copy(section, 1, 6) = 'GeoGet' then Result := 'GeoGet'
@@ -330,7 +370,9 @@ begin
   else Result := 'Other';
 end;
 
-{tolerantni cteni boolean hodnoty z ini - akceptuje 1/0 i True/False, kdyby si nekdo splet konvenci}
+{
+  Tolerantni cteni boolean hodnoty z ini - akceptuje 1/0 i True/False, kdyby si nekdo splet konvenci
+}
 function ReadBoolLenient(ini: TMemIniFile; section, key: String; defaultValue: boolean): boolean;
 var
   raw: String;
@@ -344,8 +386,10 @@ begin
   Result := (raw = '1') or (raw = 'TRUE') or (raw = 'YES');
 end;
 
-{zjisti, jestli se ma kategorie zobrazit - DetectFile nebo DetectFile1..N (staci aby existoval
- jeden z nich); pokud neni definovan zadny DetectFile(N), kategorie se zobrazi vzdy}
+{
+  Zjisti, jestli se ma kategorie zobrazit - DetectFile nebo DetectFile1..N (staci aby existoval
+  jeden z nich); pokud neni definovan zadny DetectFile(N), kategorie se zobrazi vzdy
+}
 function CategoryIsVisible(section: String): boolean;
 var
   detectPath: String;
@@ -385,14 +429,19 @@ begin
   Result := not anyDetectDefined;
 end;
 
-{true, pokud ClearTemp.ini [Settings] Language=CS - pak se pouzivaji Label_CS/Hint_CS}
+{
+  True, pokud ClearTemp.ini [Settings] Language=CS - pak se pouzivaji Label_CS/Hint_CS
+  z ClearTemp.definitions.ini, pokud existuji, jinak se pouzije Label/Hint
+}
 function CurrentLanguageIsCzech: boolean;
 begin
   Result := UpperCase(Trim(SettingsIni.ReadString('Settings', 'Language', ''))) = 'CS';
 end;
 
-{rozepise \n na skutecny zalom radku (CRLF); \\ pred tim ochranime jako doslovne zpetne
- lomitko, aby se necekane nerozlomil text obsahujici napr. cestu \network (zacina na \n)}
+{
+  Rozepise \n na skutecny zalom radku (CRLF); \\ pred tim ochranime jako doslovne zpetne
+  lomitko, aby se necekane nerozlomil text obsahujici napr. cestu \network (zacina na \n)
+}
 function UnescapeText(s: String): String;
 begin
   s := ReplaceString(s, '\\', #1);
@@ -401,8 +450,10 @@ begin
   Result := s;
 end;
 
-{vrati Label/Hint/Warning (nebo jejich _CS variantu) z DefinitionsIni, bez gettext;
- \n v textu se rozepise na skutecny zalom radku (viz UnescapeText)}
+{
+  Vrati Label/Hint/Warning (nebo jejich _CS variantu) z DefinitionsIni, bez gettext;
+  \n v textu se rozepise na skutecny zalom radku (viz UnescapeText)
+}
 function LocalizedText(section, key: String): String;
 var
   csValue: String;
@@ -419,7 +470,13 @@ begin
   Result := UnescapeText(DefinitionsIni.ReadString(section, key, ''));
 end;
 
-{nastavi popisek zalozky na "zakladni nazev (pocet zaskrtnutych)"}
+// ==============================================================================
+//  Sestaveni a obsluha dialogu (options + confirm)
+// ==============================================================================
+
+{
+  Nastavi popisek zalozky na "zakladni nazev (pocet zaskrtnutych)"
+}
 procedure UpdateTabCaption(tabsheet: TTabSheet; baseCaption: String);
 var
   i, count: Integer;
@@ -431,7 +488,9 @@ begin
   tabsheet.Caption := baseCaption + ' (' + IntToStr(count) + ')';
 end;
 
-{povoli/zakaze combo se starim, zobrazi Warning= pri zaskrtnuti, aktualizuje popisek zalozky}
+{
+  Povoli/zakaze combo se starim, zobrazi Warning= pri zaskrtnuti, aktualizuje popisek zalozky
+}
 procedure OnCategoryClick(sender: TObject);
 var
   i, j: Integer;
@@ -466,7 +525,9 @@ begin
   end;
 end;
 
-{prevede bajty na text v MB se 2 desetinnymi misty (bez FormatFloat)}
+{
+  Prevede bajty na text v MB se 2 desetinnymi misty (bez FormatFloat)
+}
 function FormatSizeMB(bytes: Integer): String;
 var
   wholeMB, fracMB: Integer;
@@ -479,7 +540,9 @@ begin
   Result := IntToStr(wholeMB) + '.' + fracStr;
 end;
 
-{dvojklik na polozku v seznamu ke smazani otevre adresar, kde se soubor nachazi}
+{
+  Dvojklik na polozku v seznamu ke smazani otevre adresar, kde se soubor nachazi
+}
 procedure OnDeleteListDblClick(sender: TObject);
 var
   filePath, folderPath: String;
@@ -494,7 +557,9 @@ begin
     RunShell(folderPath);
 end;
 
-{prevede text v combu na vyslednou hodnotu Days, respektuje AllowNotInDatabase}
+{
+  Prevede text v combu na vyslednou hodnotu Days, respektuje AllowNotInDatabase
+}
 function ResolveDays(section: String; combo: TComboBox): Integer;
 var
   txt: String;
@@ -505,7 +570,7 @@ begin
 
   if combo = nil then
   begin
-    {bez DaysOptions: kategorie s AllowNotInDatabase resi jen osirele soubory, jinak vse}
+    // Bez DaysOptions: kategorie s AllowNotInDatabase resi jen osirele soubory, jinak vse
     if allowNotInDb then Result := -2 else Result := -1;
     Exit;
   end;
@@ -519,12 +584,14 @@ begin
 
   val := StrToIntDef(txt, -1);
   if (val = -2) and not allowNotInDb then val := -1;
-  if val = 0 then val := -1; {0 dni = bez casoveho omezeni, stejne jako prazdna hodnota}
+  if val = 0 then val := -1; // 0 dni = bez casoveho omezeni, stejne jako prazdna hodnota
   Result := val;
 end;
 
-{slouci ClearTemp.definitions.ini (dodavane) a ClearTemp.ini (uzivatelske pridavky/prepisy)
- do DefinitionsIni - stejna sekce+klic v ClearTemp.ini ma prednost pred dodavanou hodnotou}
+{
+  Slouci ClearTemp.definitions.ini (dodavane) a ClearTemp.ini (uzivatelske pridavky/prepisy)
+  do DefinitionsIni - stejna sekce+klic v ClearTemp.ini ma prednost pred dodavanou hodnotou
+}
 procedure BuildMergedDefinitions;
 var
   shipped: TIniFile;
@@ -563,7 +630,11 @@ begin
   end;
 end;
 
-{sestavi zalozky (podle prefixu nazvu sekce) a v nich checkboxy (+ combo dnu) kategorii}
+{
+  Sestavi zalozky (podle prefixu nazvu sekce) a v nich checkboxy (+ combo dnu) kategorii
+  podle definic v DefinitionsIni. Zalozky se znovu sestavuji pri kazdem otevreni dialogu,
+  aby se zohlednily pripadne zmeny v definicich
+}
 procedure BuildOptionsForm;
 var
   order, tabScrollBoxes, tabTops: TStringList;
@@ -575,7 +646,8 @@ var
   tabsheet: TTabSheet;
   scrollbox: TScrollBox;
 begin
-  {smazani pripadnych zalozek z predchoziho spusteni pluginu}
+  // Smazani pripadnych zalozek z predchoziho spusteni pluginu - pokud se zmenil seznam kategorií,
+  // jinak by zustaly prazdne zalozky
   while ClearTempOptions_pcCategories.ControlCount > 0 do
     ClearTempOptions_pcCategories.Controls[0].Free;
 
@@ -669,21 +741,21 @@ begin
       tabTops[tabIdx] := IntToStr(top);
     end;
 
-    {dynamicka vyska formulare podle nejvyssi zalozky, max cca 900px}
+    // Dynamicka vyska formulare podle nejvyssi zalozky, max cca 900px minus zbytek formulare
     maxTop := 4;
     for i := 0 to tabTops.Count - 1 do
       if StrToIntDef(tabTops[i], 4) > maxTop then maxTop := StrToIntDef(tabTops[i], 4);
 
-    pageControlHeight := maxTop + 34; {rezerva na zahlavi zalozek}
+    pageControlHeight := maxTop + 34; // Rezerva na zahlavi zalozek
     if pageControlHeight < 290 then pageControlHeight := 290;
-    if pageControlHeight > 800 then pageControlHeight := 800; {900 minus zbytek formulare}
+    if pageControlHeight > 800 then pageControlHeight := 800; // 900 minus zbytek formulare
 
     ClearTempOptions_pcCategories.Height := pageControlHeight;
     ClearTempOptions.Height := 30 + pageControlHeight + 77;
     ClearTempOptions_buttonOk.Top := 30 + pageControlHeight + 10;
     ClearTempOptions_buttonCancel.Top := ClearTempOptions_buttonOk.Top;
 
-    {pocatecni popisky zalozek s poctem zaskrtnutych}
+    // Pocatecni popisky zalozek s poctem zaskrtnutych
     for i := 0 to TabInfo.Count - 1 do
       UpdateTabCaption(TTabSheet(TabInfo.Objects[i]), TabInfo[i]);
   finally
@@ -692,6 +764,10 @@ begin
     tabTops.Free;
   end;
 end;
+
+// ==============================================================================
+//  Hlavni vstupni bod pluginu
+// ==============================================================================
 
 procedure PluginStart;
 var
@@ -711,20 +787,20 @@ begin
   SettingsIni := TIniFile.Create(GEOGET_SCRIPTDIR + '\ClearTemp\ClearTemp.ini');
   DefinitionsIni := TMemIniFile.Create(GEOGET_SCRIPTDIR + '\ClearTemp\definitions.merged.tmp.ini');
   try
-    {slouceni dodavanych definic s pripadnymi uzivatelskymi pridavky/prepisy}
+    // Slouceni dodavanych definic s pripadnymi uzivatelskymi pridavky/prepisy
     BuildMergedDefinitions;
 
-    {dvojklik v seznamu ke smazani otevre adresar se souborem}
+    // Dvojklik v seznamu ke smazani otevre adresar se souborem
     ClearTempConfirmDelete_lbDeleteFiles.OnDblClick := @OnDeleteListDblClick;
 
-    {sestaveni dynamickeho seznamu kategorii}
+    // Sestaveni dynamickeho seznamu kategorii podle definic v ClearTemp.definitions.ini a ClearTemp.ini
     BuildOptionsForm;
 
-    {dialog s nastavenim}
+    // Dialog s nastavenim kategorii a jejich parametru (dnu)
     ClearTempOptions.Caption := _('Clear Temp - Options');
     if ClearTempOptions.ShowModal <> 1 then Exit;
 
-    {zjisti, jestli je potreba databaze kesi (nektera zaskrtnuta kategorie resi -2)}
+    // Zjisti, jestli je potreba databaze kesi (nektera zaskrtnuta kategorie resi -2)
     needDatabaseList := False;
     for i := 0 to CategoryCheckboxes.Count - 1 do
     begin
@@ -740,7 +816,7 @@ begin
       GEOGET_DB.GetTableStrings('SELECT distinct id FROM geocache', DatabaseIDList);
     end;
 
-    {hledani souboru + ulozeni stavu vsech kategorii do ClearTemp.ini}
+    // Hledani souboru + ulozeni stavu vsech kategorii do ClearTemp.ini
     GeoBusyCaption(_('Searching files'));
     for i := 0 to CategoryCheckboxes.Count - 1 do
     begin
@@ -769,21 +845,21 @@ begin
       end;
     end;
 
-    {oznaceni vsech v seznamu}
+    // Oznaceni vsech v seznamu ke smazani, aby se uzivatel mohl rozhodnout, co skutecne smazat
     for i := 0 to ClearTempConfirmDelete_lbDeleteFiles.Items.Count - 1 do
       ClearTempConfirmDelete_lbDeleteFiles.Selected[i] := True;
 
-    {popisek s poctem nalezu}
+    // Popisek s poctem nalezu a celkovou velikosti
     resultsLabel := _('Found %COUNT% items with total size %SIZE% MB');
     resultsLabel := ReplaceString(resultsLabel,'%COUNT%',IntToStr(ClearTempConfirmDelete_lbDeleteFiles.Items.Count));
     resultsLabel := ReplaceString(resultsLabel,'%SIZE%',FormatSizeMB(totalSize));
     ClearTempConfirmDelete_lblResult.Caption := resultsLabel;
 
-    {dialog s vysledky}
+    // Dialog s vysledky a potvrzenim smazani
     ClearTempConfirmDelete.Caption := _('Clear Temp - Confirm results');
     if ClearTempConfirmDelete.ShowModal <> 1 then Exit;
 
-    {smazani oznacenych}
+    // Smazani oznacenych souboru
     GeoBusyCaption(_('Deleting files'));
     for i := 0 to ClearTempConfirmDelete_lbDeleteFiles.Items.Count - 1 do
     begin
@@ -796,7 +872,7 @@ begin
       end;
     end;
 
-    {smazani prazdnych slozek - cesty jsou definovany v [Settings] EmptyFolderSweep1..N (pokud existuji)}
+    // Smazani prazdnych slozek - cesty jsou definovany v [Settings] EmptyFolderSweep1..N (pokud existuji)
     GeoBusyCaption(_('Clean up!'));
     n := 1;
     sweepPath := DefinitionsIni.ReadString('Settings', 'EmptyFolderSweep' + IntToStr(n), '');
@@ -808,7 +884,7 @@ begin
       sweepPath := DefinitionsIni.ReadString('Settings', 'EmptyFolderSweep' + IntToStr(n), '');
     end;
 
-    {smazani prazdnych slozek pro FileKeyN s priznakem REMOVESELF (jen zaskrtnute kategorie)}
+    // Smazani prazdnych slozek pro FileKeyN s priznakem REMOVESELF (jen zaskrtnute kategorie)
     for i := 0 to SweepFolders.Count - 1 do
       DeleteEmptyFolders(SweepFolders[i]);
   finally
