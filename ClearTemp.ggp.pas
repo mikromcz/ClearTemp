@@ -241,7 +241,8 @@ end;
 
 {Hleda soubory v danem adresari (StartDir), volitelne vcetne podslozek (Recursive),
  podle jednoduche masky (Mask). Nalezene soubory se filtruji podle Days stejne
- jako drive (-2 = neni v databazi, -1 = vse, 0..N = stari ve dnech).}
+ jako drive (-2 = neni v databazi, -1 = vse, 1..N = stari ve dnech; 0 se v ResolveDays
+ uz prevede na -1).}
 procedure SearchFileKey(StartDir, Mask: String; Recursive: boolean; Days: Integer);
 var
    Files,Queue: TStringList;
@@ -518,6 +519,7 @@ begin
 
   val := StrToIntDef(txt, -1);
   if (val = -2) and not allowNotInDb then val := -1;
+  if val = 0 then val := -1; {0 dni = bez casoveho omezeni, stejne jako prazdna hodnota}
   Result := val;
 end;
 
@@ -617,7 +619,7 @@ begin
       chk.Parent := scrollbox;
       chk.Left := 5;
       chk.Top := top;
-      if daysOptions <> '' then chk.Width := 215 else chk.Width := 290;
+      if daysOptions <> '' then chk.Width := 305 else chk.Width := 360;
       chk.Height := 17;
       chk.Name := 'chk_' + section;
 
@@ -642,13 +644,16 @@ begin
         combo := TComboBox.Create(scrollbox);
         combo.Parent := scrollbox;
         combo.Name := 'combo_' + section;
-        combo.Left := 225;
+        combo.Left := 315;
         combo.Top := top - 3;
         combo.Width := 50;
         combo.Height := 24;
         combo.ShowHint := True;
         combo.ParentShowHint := False;
-        combo.Hint := _('Empty value delete all files,') + CRLF + _('-2 delete files which haven''t parent point in database');
+        if ReadBoolLenient(DefinitionsIni, section, 'AllowNotInDatabase', False) then
+          combo.Hint := _('Empty value or 0 delete all files,') + CRLF + _('-2 delete files which haven''t parent point in database')
+        else
+          combo.Hint := _('Empty value or 0 delete all files');
         SplitCommaList(daysOptions, combo.Items);
 
         daysDefault := SettingsIni.ReadString('LastState', section + '_Days', '');

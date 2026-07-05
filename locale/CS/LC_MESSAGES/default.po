@@ -123,14 +123,19 @@ msgstr "Obrázky z listingů starší než"
 msgid "Files in folder \\offline\\inc"
 msgstr "Soubory v adresáři \\offline\\inc"
 
-#. Combo hint used by every category with DaysOptions=
+#. Combo hint used by every category with DaysOptions= and AllowNotInDatabase=1
 #: ClearTemp.ggp.pas:BuildOptionsForm
 msgid ""
-"Empty value delete all files,\n"
+"Empty value or 0 delete all files,\n"
 "-2 delete files which haven't parent point in database"
 msgstr ""
-"Prázdná hodnota maže všechny soubory\n"
+"Prázdná hodnota nebo 0 maže všechny soubory\n"
 "-2 maže soubory ke kterým neexistuje keš v databázi"
+
+#. Combo hint used by every category with DaysOptions= but without AllowNotInDatabase=1
+#: ClearTemp.ggp.pas:BuildOptionsForm
+msgid "Empty value or 0 delete all files"
+msgstr "Prázdná hodnota nebo 0 maže všechny soubory"
 
 #. ClearTemp.ini [SRTM] Label
 #: ClearTemp.ini:SRTM:Label
