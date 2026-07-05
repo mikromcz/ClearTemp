@@ -23,9 +23,9 @@ msgid "What do you want to clean?"
 msgstr "Co chcete smazat?"
 
 #. Designer..buttonOk..Caption
-#: ClearTemp.gfm:100
-msgid "OK"
-msgstr "OK"
+#: ClearTemp.gfm:38
+msgid "Scan"
+msgstr "Hledat"
 
 #. Designer..buttonCancel..Caption
 #: ClearTemp.gfm:152
