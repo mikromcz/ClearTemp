@@ -56,7 +56,7 @@ This is a deliberately narrow subset of the CCleaner `winapp2.ini` format (`Lang
 
 ## Localization of category text
 
-Category `Label=`/`Hint=` text is **not** translated via gettext — it's looked up directly by `LocalizedText`, which checks `ClearTemp.ini`'s `[Settings]` `Language=` (via `CurrentLanguageIsCzech`): if `CS`, `Label_CS=`/`Hint_CS=` is used when present, otherwise it falls back to the English `Label=`/`Hint=`. Chosen because `dxgettext`-style tools can't extract from ini content. No auto-detection of GeoGet's own UI language — `Language=` is a plain user-editable setting, blank by default (English). A new language means adding another `_XX` suffix convention and extending `LocalizedText`, not touching `.po`/`.mo`.
+Category `Label=`/`Hint=` text is **not** translated via gettext — it's looked up directly by `LocalizedText`, which checks `ClearTemp.ini`'s `[Settings]` `Language=` (via `CurrentLanguageIsCzech`): `Label_CS=`/`Hint_CS=` is used when present unless `Language=` is set to something other than `CS` (including an explicit empty value), in which case it falls back to the English `Label=`/`Hint=`. Chosen because `dxgettext`-style tools can't extract from ini content. No auto-detection of GeoGet's own UI language — `Language=` is a plain user-editable setting, defaulting to `CS` when the key is absent entirely (an explicit `Language=` with no value forces English). A new language means adding another `_XX` suffix convention and extending `LocalizedText`, not touching `.po`/`.mo`.
 
 ## Tabs (`TabNameForSection`) and dynamic sizing
 

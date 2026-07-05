@@ -5,7 +5,7 @@
   Puvodni verze: ProKesTom, http://www.geocaching.cz/forum/viewthread.php?forum_id=20&thread_id=17432&pid=251781#post_251781
   Autor: mikrom, http://mikrom.cz
   Fórum: https://forum.geocaching.cz/t/clearcache-cleartemp-plugin-pro-mazani-nepotrebnych-souboru/16523
-  Verze: 0.3.1
+  Verze: 0.3.2
 
   Kategorie mazani (checkboxy v dialogu) se negeneruji staticky, ale nactou se za behu
   ze dvou INI souboru, slouceniych dohromady v DefinitionsIni (viz BuildMergedDefinitions):
@@ -435,7 +435,7 @@ end;
 }
 function CurrentLanguageIsCzech: boolean;
 begin
-  Result := UpperCase(Trim(SettingsIni.ReadString('Settings', 'Language', ''))) = 'CS';
+  Result := UpperCase(Trim(SettingsIni.ReadString('Settings', 'Language', 'CS'))) = 'CS';
 end;
 
 {

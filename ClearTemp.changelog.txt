@@ -1,3 +1,14 @@
+=== 0.3.2 (2026/07/05) ===
+  * Nové kategorie: obrázky/ikonky HTML listingů ve složce \offline\img, podružné index soubory HTML listingů ve složce \offline\index, systémové obrázky/ikonky atributů a keší ve složce \offline\sysimg (všechny s volbou stáří ve dnech)
+  * Možnost "-2 = neexistuje keš v databázi" je nyní jen u kategorie Přílohy (Attach) - u kategorií \offline\cache, \offline\inc a \offline\maps byla zrušena; nápověda u comboboxu s dny se teď zobrazuje jen tam, kde je tato volba skutečně dostupná
+  * Prázdná hodnota i 0 v comboboxu s dny nyní shodně znamenají "smazat vše" (dřív se 0 chovalo takto jen fakticky díky porovnání data, teď i doslova)
+  * Kategorie MtpToolLib přesunuta do záložky "Script" (dřív spadala do "Other")
+  * Přeuspořádané pořadí kategorií v záložkách GeoGet/Script pro přehlednost
+  * Upřesněné popisky kategorií \offline\cache, \offline\inc a \offline\maps (HTML listingy) pro odlišení od novějších binárních <db>.imc/<db>.map
+  * Tlačítko "OK" v dialogu nastavení přejmenováno na "Hledat" - lépe vystihuje, že spouští vyhledávání souborů ke smazání, ne mazání samotné
+  * Čeština je nyní výchozí jazyk pluginu, pokud ClearTemp.ini neobsahuje žádné nastavení Language= (dřív byla výchozí angličtina); anglický popis lze vynutit zápisem Language= s jinou hodnotou než CS (např. Language=EN)
+  * Oprava ikony pluginu na panelu nástrojů
+
 === 0.3.1 (2026/07/03) ===
   * Oprava: hledání kešky v databázi (-2, např. u osiřelých příloh) selhávalo u souborů, jejichž název náhodou obsahoval podřetězec podobný kódu kešky (např. "NOCNI" obsahuje "OCNI") - bere se nyní jen první nalezená shoda odpovídající adresáři s kódem kešky
   * REMOVESELF u FileKeyN nyní opravdu maže i prázdnou složku pro zaškrtnuté kategorie (dřív dělal totéž co RECURSE)

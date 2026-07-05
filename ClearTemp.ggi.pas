@@ -4,7 +4,7 @@
 
   Autor: mikrom, http://mikrom.cz
   Fórum: https://forum.geocaching.cz/t/clearcache-cleartemp-plugin-pro-mazani-nepotrebnych-souboru/16523
-  Verze: 0.3.1
+  Verze: 0.3.2
 
   Instalacni skript - spusti se jednou pri instalaci/aktualizaci pluginu (viz script=
   v ClearTemp.meta.ini). Uklizi soubory po starsich verzich a zobrazuje changelog.
