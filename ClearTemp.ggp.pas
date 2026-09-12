@@ -44,7 +44,7 @@ var
 
 function PluginCaption: string;
 begin
-  Result := _('Clear Temp');
+  Result := 'Clear Temp';
 end;
 
 function PluginHint: string;
