@@ -1,2 +1,5 @@
-# Auto detect text files and perform LF normalization
-* text=crlf
+# Auto detect text files, store them with LF in the repo and check them out with CRLF (Windows / GeoGet)
+* text=auto eol=crlf
+
+# Compiled gettext catalog - never touch line endings
+*.mo binary

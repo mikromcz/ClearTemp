@@ -1,21 +1,33 @@
 # General
 *.bak
 *.old
+*~
+*.tmp
 
-# Windows
+# Windows / OneDrive / Office
 Thumbs.db
 [Dd]esktop.ini
 *.lnk
+~$*
 
 # VisualStudio
 .vscode/
 
-# Claude
-.claude/
+# Claude Code local/private files
+.claude/settings.local.json
+.claude/sessions/
+.claude/todos/
+.claude/scheduled_tasks.*
+.claude/worktrees/
+*.local.json
+*.local.md
+# Skill reference pages are copied from the geoget.cz wiki - keep them local, commit only SKILL.md
+.claude/skills/*/references/
 
 # GeoGet
-/locale/CS/LC_MESSAGES/default.po~
 /locale/tools/
+*.gip
+*.config.pas
 
 # Script
 /dev/
