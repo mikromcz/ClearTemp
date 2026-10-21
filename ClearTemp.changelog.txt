@@ -1,3 +1,22 @@
+=== 0.3.3 (2026/10/21) ===
+  * Bezpečnost: osiřelé přílohy (\attach) se nyní kontrolují proti všem databázím v datovém adresáři, ne jen proti právě otevřené - složka \attach je společná pro všechny databáze, takže dřív při otevřené jiné databázi (např. MHD) plugin nabídl ke smazání i přílohy keší z hlavní databáze. Pokud některou databázi nelze načíst, osiřelé přílohy se pro jistotu nehledají vůbec
+  * Bezpečnost: neplatná hodnota stáří ve dnech (text, záporné číslo, -2 u kategorie bez této volby) už neznamená "smazat vše" - zobrazí se upozornění a dialog s nastavením znovu
+  * Bezpečnost: cesta s neexistující proměnnou prostředí (např. %NEEXISTUJE%\temp) se přeskočí - dřív z ní vznikla cesta do kořene disku
+  * Oprava: hledání osiřelých příloh (-2) hledá kód kešky jen v cestě pod složkou kategorie - dřív se mohl chybně najít v cestě k datovému adresáři (např. C:\Users\WMAREK\...) a pak by se nabídly ke smazání všechny přílohy
+  * Oprava: masky souborů nerozlišují velikost písmen (*.log najde i ERROR.LOG) a funguje i se speciálními znaky v názvu
+  * Oprava: celková velikost nalezených souborů nad 2 GB se už nezobrazí záporně (i soubory 2-4 GB se počítají správně)
+  * Oprava: soubor nalezený více kategoriemi (např. *.old ve složce temp) je v seznamu jen jednou a jeho velikost se nepočítá dvakrát
+  * Oprava: vlastní kategorie v ClearTemp.ini s mezerou, pomlčkou nebo tečkou v názvu sekce už neshodí plugin
+  * Oprava: mazání prázdných složek odstraní v jednom běhu i celý řetězec vnořených prázdných složek
+  * Oprava: kategorie \offline\cache nenacházela žádné soubory - GeoGet je ukládá jako *.htm, maska byla *.html (nyní *.htm*)
+  * Kategorie \offline\sysimg nově nemaže podsložku \rop\ (prochází se jen samotná složka a podsložky \GC\ a \WM\)
+  * Oprava překlepu v popisku kategorie \offline\cache ("použití")
+  * Hledání souborů lze přerušit tlačítkem Cancel
+  * Po smazání se zobrazí počet souborů, které se smazat nepodařilo (používané nebo bez přístupu)
+  * Výrazné zrychlení hledání osiřelých příloh u velkých databází a menší zrychlení procházení souborů
+  * Plugin neběží v databázové transakci (do databáze nezapisuje)
+  * Plugin se při instalaci zařadí do skupiny "Nástroje" v menu Pluginy
+
 === 0.3.2 (2026/07/05) ===
   * Nové kategorie: obrázky/ikonky HTML listingů ve složce \offline\img, podružné index soubory HTML listingů ve složce \offline\index, systémové obrázky/ikonky atributů a keší ve složce \offline\sysimg (všechny s volbou stáří ve dnech)
   * Možnost "-2 = neexistuje keš v databázi" je nyní jen u kategorie Přílohy (Attach) - u kategorií \offline\cache, \offline\inc a \offline\maps byla zrušena; nápověda u comboboxu s dny se teď zobrazuje jen tam, kde je tato volba skutečně dostupná
