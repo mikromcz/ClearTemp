@@ -272,6 +272,26 @@ msgstr "Hledám soubory"
 msgid "Found %COUNT% items with total size %SIZE% MB"
 msgstr "Nalezeno %COUNT% souborů o celkové velikosti %SIZE% MB"
 
+#: ClearTemp.ggp.pas (ShowOptionsDialog)
+msgid "Invalid \"days old\" value \"%VALUE%\" in category \"%CATEGORY%\"."
+msgstr "Neplatná hodnota stáří \"%VALUE%\" v kategorii \"%CATEGORY%\"."
+
+#: ClearTemp.ggp.pas (ShowOptionsDialog)
+msgid "Use a whole number of days, or leave it empty (or 0) to delete all files."
+msgstr "Zadejte celý počet dní, nebo nechte prázdné (případně 0) pro smazání všech souborů."
+
+#: ClearTemp.ggp.pas (PluginStart)
+msgid "%COUNT% files could not be deleted (in use or access denied)."
+msgstr "Nepodařilo se smazat %COUNT% souborů (používané nebo bez přístupu)."
+
+#: ClearTemp.ggp.pas (LoadDatabaseIDs)
+msgid "Reading caches from databases"
+msgstr "Načítání keší z databází"
+
+#: ClearTemp.ggp.pas (LoadDatabaseIDs)
+msgid "Database \"%DATABASE%\" could not be read, so orphaned attachments will not be searched (they could belong to caches in that database)."
+msgstr "Databázi \"%DATABASE%\" se nepodařilo načíst, proto se osiřelé přílohy nehledají (mohly by patřit keším v této databázi)."
+
 #: ClearTemp.ggp.pas:240
 msgid "Clear Temp - Confirm results"
 msgstr "Clear Temp - Potvrzení výsledku"
